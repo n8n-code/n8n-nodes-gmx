@@ -55,7 +55,7 @@ export class GmxApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 			"request": {
-				"baseURL": "={{ $credentials.baseUrl }}",
+				"baseURL": "={{ $credentials.url }}",
 				"url": "/tokens/info",
 				"method": "GET"
 			}
