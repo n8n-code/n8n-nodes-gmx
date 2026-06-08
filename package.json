@@ -1,6 +1,6 @@
 {
   "name": "@n8n-dev/n8n-nodes-gmx",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "GMX decentralized perpetual exchange offering spot and leverage trading with deep liquidity on Arbitrum and Avalanche",
   "license": "MIT",
   "homepage": "https://n8n-code.github.io/n8n-dev/#/n8n-nodes-gmx",
