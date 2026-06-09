@@ -793,7 +793,7 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			}
 		},
 		{
-			"displayName": "Request Id",
+			"displayName": "Request ID",
 			"name": "requestId",
 			"type": "string",
 			"default": "",
@@ -871,7 +871,7 @@ export const orderTransactionsDescription: INodeProperties[] = [
 		},
 		{
 			"required": true,
-			"displayName": "Request Id",
+			"displayName": "Request ID",
 			"name": "requestId",
 			"type": "string",
 			"default": "",
@@ -1344,7 +1344,7 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			}
 		},
 		{
-			"displayName": "Order Id",
+			"displayName": "Order ID",
 			"name": "orderId",
 			"type": "string",
 			"default": "",

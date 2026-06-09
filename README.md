@@ -53,24 +53,130 @@ That's it. No configuration files. No code. It just works.
 
 ## Resources
 
-| Resource | Operations |
-|----------|------------|
-| Tokens | GET Get Tokens, GET Get Tokens Info |
-| Subaccounts | POST Fetch Status, POST Prepare Approval |
-| Staking | GET Get Staking Power |
-| Rates | GET Get Rates |
-| Prices | GET Get Ohlcv |
-| Positions | GET Get Positions Info, GET Get Position By Key |
-| Performance | GET Get Annualized, GET Get Snapshots |
-| Pairs | GET Get Pairs |
-| Orders | GET Get Orders By Address, GET Get Order By Key |
-| Order Transactions | POST Prepare, POST Submit, POST Status, POST Edit Prepare, POST Cancel Prepare, POST Collateral Prepare |
-| Markets | GET Get Markets, GET Get Markets Tickers, GET Get Markets Info |
-| JIT | GET Get Liquidity Info, GET Get Liquidity History |
-| Buyback | GET Get Weekly Stats |
-| Balances | GET Get Wallet Balances |
-| APY | GET Get Apy |
-| Allowances | GET Get Allowances |
+<details>
+<summary><b>Tokens</b> (2 operations)</summary>
+
+- Get Tokens
+- Get Tokens Info
+
+</details>
+
+<details>
+<summary><b>Subaccounts</b> (2 operations)</summary>
+
+- Post Fetch Status
+- Post Prepare Approval
+
+</details>
+
+<details>
+<summary><b>Staking</b> (1 operations)</summary>
+
+- Get Staking Power
+
+</details>
+
+<details>
+<summary><b>Rates</b> (1 operations)</summary>
+
+- Get Rates
+
+</details>
+
+<details>
+<summary><b>Prices</b> (1 operations)</summary>
+
+- Get Ohlcv
+
+</details>
+
+<details>
+<summary><b>Positions</b> (2 operations)</summary>
+
+- Get Positions Info
+- Get Position By Key
+
+</details>
+
+<details>
+<summary><b>Performance</b> (2 operations)</summary>
+
+- Get Annualized
+- Get Snapshots
+
+</details>
+
+<details>
+<summary><b>Pairs</b> (1 operations)</summary>
+
+- Get Pairs
+
+</details>
+
+<details>
+<summary><b>Orders</b> (2 operations)</summary>
+
+- Get Orders By Address
+- Get Order By Key
+
+</details>
+
+<details>
+<summary><b>Order Transactions</b> (6 operations)</summary>
+
+- Post Prepare
+- Post Submit
+- Post Status
+- Post Edit Prepare
+- Post Cancel Prepare
+- Post Collateral Prepare
+
+</details>
+
+<details>
+<summary><b>Markets</b> (3 operations)</summary>
+
+- Get Markets
+- Get Markets Tickers
+- Get Markets Info
+
+</details>
+
+<details>
+<summary><b>JIT</b> (2 operations)</summary>
+
+- Get Liquidity Info
+- Get Liquidity History
+
+</details>
+
+<details>
+<summary><b>Buyback</b> (1 operations)</summary>
+
+- Get Weekly Stats
+
+</details>
+
+<details>
+<summary><b>Balances</b> (1 operations)</summary>
+
+- Get Wallet Balances
+
+</details>
+
+<details>
+<summary><b>APY</b> (1 operations)</summary>
+
+- Get Apy
+
+</details>
+
+<details>
+<summary><b>Allowances</b> (1 operations)</summary>
+
+- Get Allowances
+
+</details>
 
 ---
 

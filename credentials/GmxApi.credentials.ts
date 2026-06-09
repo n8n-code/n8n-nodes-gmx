@@ -8,7 +8,7 @@ import type {
 export class GmxApi implements ICredentialType {
 	name = 'N8nDevGmxApi';
 
-	displayName = 'gmx API';
+	displayName = 'Gmx API';
 
 	icon: Icon = { light: 'file:../nodes/Gmx/gmx.svg', dark: 'file:../nodes/Gmx/gmx.dark.svg' };
 
@@ -22,7 +22,7 @@ export class GmxApi implements ICredentialType {
 			default: 'https://arbitrum.gmxapi.io/v1',
 			required: true,
 			placeholder: 'https://arbitrum.gmxapi.io/v1',
-			description: 'The base URL of your gmx API server',
+			description: 'The base URL of your Gmx API server',
 		},
 		{
 			displayName: 'API Key',

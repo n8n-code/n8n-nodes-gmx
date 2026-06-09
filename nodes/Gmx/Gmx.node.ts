@@ -18,14 +18,14 @@ import { allowancesDescription } from './resources/allowances';
 
 export class Gmx implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'gmx',
+		displayName: 'Gmx',
 		name: 'N8nDevGmx',
 		icon: { light: 'file:./gmx.svg', dark: 'file:./gmx.dark.svg' },
 		group: ['input'],
 		version: 1,
 		subtitle: '={{\$parameter["operation"] + ": " + \$parameter["resource"]}}',
-		description: 'GMX decentralized perpetual exchange offering spot and leverage trading with deep liquidity on Arbitrum and Avalanche',
-		defaults: { name: 'gmx' },
+		description: 'GMX decentralized perpetual exchange with spot and leverage trading on Arbitrum and Avalanche.',
+		defaults: { name: 'Gmx' },
 		usableAsTool: true,
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
