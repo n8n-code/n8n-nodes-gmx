@@ -7,6 +7,281 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "TradeActionResponse": {
+        "properties": {
+          "reasonBytes": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "numberOfParts": {
+            "type": "number",
+            "format": "double"
+          },
+          "twapGroupId": {
+            "type": "string"
+          },
+          "srcChainId": {
+            "type": "number",
+            "format": "double"
+          },
+          "decreasePositionSwapType": {
+            "type": "string"
+          },
+          "proportionalPendingImpactUsd": {
+            "type": "string"
+          },
+          "collateralTotalCostAmount": {
+            "type": "string"
+          },
+          "swapImpactUsd": {
+            "type": "string"
+          },
+          "executionAmountOut": {
+            "type": "string"
+          },
+          "totalImpactUsd": {
+            "type": "string"
+          },
+          "liquidationFeeAmount": {
+            "type": "string"
+          },
+          "swapFeeUsd": {
+            "type": "string"
+          },
+          "fundingFeeAmount": {
+            "type": "string"
+          },
+          "borrowingFeeAmount": {
+            "type": "string"
+          },
+          "traderDiscountAmount": {
+            "type": "string"
+          },
+          "positionFeeAmount": {
+            "type": "string"
+          },
+          "priceImpactDiffUsd": {
+            "type": "string"
+          },
+          "priceImpactUsd": {
+            "type": "string"
+          },
+          "basePnlUsd": {
+            "type": "string"
+          },
+          "pnlUsd": {
+            "type": "string"
+          },
+          "minOutputAmount": {
+            "type": "string"
+          },
+          "collateralTokenPriceMax": {
+            "type": "string"
+          },
+          "collateralTokenPriceMin": {
+            "type": "string"
+          },
+          "indexTokenPriceMax": {
+            "type": "string"
+          },
+          "indexTokenPriceMin": {
+            "type": "string"
+          },
+          "executionPrice": {
+            "type": "string"
+          },
+          "triggerPrice": {
+            "type": "string"
+          },
+          "acceptablePrice": {
+            "type": "string"
+          },
+          "sizeDeltaInTokens": {
+            "type": "string"
+          },
+          "sizeDeltaUsd": {
+            "type": "string"
+          },
+          "isLong": {
+            "type": "boolean"
+          },
+          "marketAddress": {
+            "type": "string"
+          },
+          "shouldUnwrapNativeToken": {
+            "type": "boolean"
+          },
+          "initialCollateralDeltaAmount": {
+            "type": "string"
+          },
+          "initialCollateralTokenAddress": {
+            "type": "string"
+          },
+          "swapPath": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "transactionHash": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number",
+            "format": "double"
+          },
+          "orderKey": {
+            "type": "string"
+          },
+          "orderType": {
+            "type": "number",
+            "format": "double"
+          },
+          "account": {
+            "type": "string"
+          },
+          "eventName": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "initialCollateralDeltaAmount",
+          "initialCollateralTokenAddress",
+          "swapPath",
+          "transactionHash",
+          "timestamp",
+          "orderKey",
+          "orderType",
+          "account",
+          "eventName",
+          "id"
+        ],
+        "type": "object"
+      },
+      "TradeResponse": {
+        "$ref": "#/components/schemas/TradeActionResponse"
+      },
+      "TradesListResponse": {
+        "properties": {
+          "hasMore": {
+            "type": "boolean"
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/TradeResponse"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "hasMore",
+          "nextCursor",
+          "trades"
+        ],
+        "type": "object"
+      },
+      "TradeDirection": {
+        "type": "string",
+        "enum": [
+          "long",
+          "short",
+          "swap",
+          "any"
+        ]
+      },
+      "MarketDirectionFilter": {
+        "properties": {
+          "collateralAddress": {
+            "type": "string"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/TradeDirection"
+          },
+          "marketAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "direction",
+          "marketAddress"
+        ],
+        "type": "object"
+      },
+      "OrderEventCombination": {
+        "properties": {
+          "isTwap": {
+            "type": "boolean"
+          },
+          "isDepositOrWithdraw": {
+            "type": "boolean"
+          },
+          "orderType": {
+            "type": "number",
+            "format": "double"
+          },
+          "eventName": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TradesSearchRequest": {
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Opaque pagination cursor returned by previous response."
+          },
+          "limit": {
+            "type": "number",
+            "format": "double",
+            "description": "Page size, 1..1000. Defaults to 100."
+          },
+          "showDebugValues": {
+            "type": "boolean",
+            "description": "When false (default), excludes MarketIncrease/Decrease/Swap OrderCreated debug events."
+          },
+          "orderEventCombinations": {
+            "items": {
+              "$ref": "#/components/schemas/OrderEventCombination"
+            },
+            "type": "array"
+          },
+          "marketsDirections": {
+            "items": {
+              "$ref": "#/components/schemas/MarketDirectionFilter"
+            },
+            "type": "array"
+          },
+          "toTimestamp": {
+            "type": "number",
+            "format": "double",
+            "description": "Inclusive upper-bound timestamp filter. Accepts seconds or milliseconds."
+          },
+          "fromTimestamp": {
+            "type": "number",
+            "format": "double",
+            "description": "Inclusive lower-bound timestamp filter. Accepts seconds or milliseconds."
+          },
+          "forAllAccounts": {
+            "type": "boolean",
+            "description": "When true, returns trades for all accounts."
+          },
+          "address": {
+            "type": "string",
+            "description": "Trader address. Required unless `forAllAccounts` is true."
+          }
+        },
+        "type": "object"
+      },
       "TokenResponse": {
         "properties": {
           "searchAliases": {
@@ -768,6 +1043,15 @@
           "netPriceImapctDeltaUsd": {
             "type": "string"
           },
+          "pnlAfterAllFeesPercentage": {
+            "type": "string"
+          },
+          "pnlAfterAllFees": {
+            "type": "string"
+          },
+          "netValueAfterAllFees": {
+            "type": "string"
+          },
           "pnlAfterFeesPercentage": {
             "type": "string"
           },
@@ -881,6 +1165,9 @@
           "pendingImpactUsd",
           "priceImpactDiffUsd",
           "netPriceImapctDeltaUsd",
+          "pnlAfterAllFeesPercentage",
+          "pnlAfterAllFees",
+          "netValueAfterAllFees",
           "pnlAfterFeesPercentage",
           "pnlAfterFees",
           "pnlPercentage",
@@ -1115,6 +1402,12 @@
           },
           "mode": {
             "$ref": "#/components/schemas/TransactionMode"
+          },
+          "uiFeeReceiver": {
+            "type": "string"
+          },
+          "referralCode": {
+            "type": "string"
           },
           "autoCancel": {
             "type": "boolean"
@@ -1485,6 +1778,9 @@
           },
           "mode": {
             "$ref": "#/components/schemas/TransactionMode"
+          },
+          "uiFeeReceiver": {
+            "type": "string"
           },
           "gasPaymentToken": {
             "type": "string"
@@ -2052,6 +2348,378 @@
         ],
         "type": "object"
       },
+      "Pick_MarketInfoResponse.Exclude_keyofMarketInfoResponse.Exclude_MarketValuesFieldKey.marketTokenAddress___": {
+        "properties": {
+          "marketTokenAddress": {
+            "type": "string"
+          },
+          "indexTokenAddress": {
+            "type": "string"
+          },
+          "longTokenAddress": {
+            "type": "string"
+          },
+          "shortTokenAddress": {
+            "type": "string"
+          },
+          "isSameCollaterals": {
+            "type": "boolean"
+          },
+          "isSpotOnly": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "isDisabled": {
+            "type": "boolean"
+          },
+          "maxLongPoolAmount": {
+            "type": "string"
+          },
+          "maxShortPoolAmount": {
+            "type": "string"
+          },
+          "maxLongPoolUsdForDeposit": {
+            "type": "string"
+          },
+          "maxShortPoolUsdForDeposit": {
+            "type": "string"
+          },
+          "reserveFactorLong": {
+            "type": "string"
+          },
+          "reserveFactorShort": {
+            "type": "string"
+          },
+          "openInterestReserveFactorLong": {
+            "type": "string"
+          },
+          "openInterestReserveFactorShort": {
+            "type": "string"
+          },
+          "maxOpenInterestLong": {
+            "type": "string"
+          },
+          "maxOpenInterestShort": {
+            "type": "string"
+          },
+          "borrowingFactorLong": {
+            "type": "string"
+          },
+          "borrowingFactorShort": {
+            "type": "string"
+          },
+          "borrowingExponentFactorLong": {
+            "type": "string"
+          },
+          "borrowingExponentFactorShort": {
+            "type": "string"
+          },
+          "fundingFactor": {
+            "type": "string"
+          },
+          "fundingExponentFactor": {
+            "type": "string"
+          },
+          "fundingIncreaseFactorPerSecond": {
+            "type": "string"
+          },
+          "fundingDecreaseFactorPerSecond": {
+            "type": "string"
+          },
+          "thresholdForStableFunding": {
+            "type": "string"
+          },
+          "thresholdForDecreaseFunding": {
+            "type": "string"
+          },
+          "minFundingFactorPerSecond": {
+            "type": "string"
+          },
+          "maxFundingFactorPerSecond": {
+            "type": "string"
+          },
+          "minPositionImpactPoolAmount": {
+            "type": "string"
+          },
+          "positionImpactPoolDistributionRate": {
+            "type": "string"
+          },
+          "minCollateralFactor": {
+            "type": "string"
+          },
+          "minCollateralFactorForLiquidation": {
+            "type": "string"
+          },
+          "minCollateralFactorForOpenInterestLong": {
+            "type": "string"
+          },
+          "minCollateralFactorForOpenInterestShort": {
+            "type": "string"
+          },
+          "maxPnlFactorForTradersLong": {
+            "type": "string"
+          },
+          "maxPnlFactorForTradersShort": {
+            "type": "string"
+          },
+          "maxPnlFactorForDepositsLong": {
+            "type": "string"
+          },
+          "maxPnlFactorForDepositsShort": {
+            "type": "string"
+          },
+          "maxPnlFactorForWithdrawalsLong": {
+            "type": "string"
+          },
+          "maxPnlFactorForWithdrawalsShort": {
+            "type": "string"
+          },
+          "positionFeeFactorForBalanceWasImproved": {
+            "type": "string"
+          },
+          "positionFeeFactorForBalanceWasNotImproved": {
+            "type": "string"
+          },
+          "positionImpactFactorPositive": {
+            "type": "string"
+          },
+          "positionImpactFactorNegative": {
+            "type": "string"
+          },
+          "maxPositionImpactFactorPositive": {
+            "type": "string"
+          },
+          "maxPositionImpactFactorNegative": {
+            "type": "string"
+          },
+          "maxPositionImpactFactorForLiquidations": {
+            "type": "string"
+          },
+          "maxLendableImpactFactor": {
+            "type": "string"
+          },
+          "maxLendableImpactFactorForWithdrawals": {
+            "type": "string"
+          },
+          "maxLendableImpactUsd": {
+            "type": "string"
+          },
+          "lentPositionImpactPoolAmount": {
+            "type": "string"
+          },
+          "positionImpactExponentFactorPositive": {
+            "type": "string"
+          },
+          "positionImpactExponentFactorNegative": {
+            "type": "string"
+          },
+          "useOpenInterestInTokensForBalance": {
+            "type": "boolean"
+          },
+          "swapFeeFactorForBalanceWasImproved": {
+            "type": "string"
+          },
+          "swapFeeFactorForBalanceWasNotImproved": {
+            "type": "string"
+          },
+          "atomicSwapFeeFactor": {
+            "type": "string"
+          },
+          "swapImpactFactorPositive": {
+            "type": "string"
+          },
+          "swapImpactFactorNegative": {
+            "type": "string"
+          },
+          "swapImpactExponentFactor": {
+            "type": "string"
+          },
+          "withdrawalFeeFactorBalanceWasImproved": {
+            "type": "string"
+          },
+          "withdrawalFeeFactorBalanceWasNotImproved": {
+            "type": "string"
+          },
+          "virtualMarketId": {
+            "type": "string"
+          },
+          "virtualLongTokenId": {
+            "type": "string"
+          },
+          "virtualShortTokenId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "marketTokenAddress",
+          "indexTokenAddress",
+          "longTokenAddress",
+          "shortTokenAddress",
+          "isSameCollaterals",
+          "isSpotOnly",
+          "name",
+          "data",
+          "isDisabled",
+          "maxLongPoolAmount",
+          "maxShortPoolAmount",
+          "maxLongPoolUsdForDeposit",
+          "maxShortPoolUsdForDeposit",
+          "reserveFactorLong",
+          "reserveFactorShort",
+          "openInterestReserveFactorLong",
+          "openInterestReserveFactorShort",
+          "maxOpenInterestLong",
+          "maxOpenInterestShort",
+          "borrowingFactorLong",
+          "borrowingFactorShort",
+          "borrowingExponentFactorLong",
+          "borrowingExponentFactorShort",
+          "fundingFactor",
+          "fundingExponentFactor",
+          "fundingIncreaseFactorPerSecond",
+          "fundingDecreaseFactorPerSecond",
+          "thresholdForStableFunding",
+          "thresholdForDecreaseFunding",
+          "minFundingFactorPerSecond",
+          "maxFundingFactorPerSecond",
+          "minPositionImpactPoolAmount",
+          "positionImpactPoolDistributionRate",
+          "minCollateralFactor",
+          "minCollateralFactorForLiquidation",
+          "minCollateralFactorForOpenInterestLong",
+          "minCollateralFactorForOpenInterestShort",
+          "maxPnlFactorForTradersLong",
+          "maxPnlFactorForTradersShort",
+          "positionFeeFactorForBalanceWasImproved",
+          "positionFeeFactorForBalanceWasNotImproved",
+          "positionImpactFactorPositive",
+          "positionImpactFactorNegative",
+          "maxPositionImpactFactorPositive",
+          "maxPositionImpactFactorNegative",
+          "maxPositionImpactFactorForLiquidations",
+          "maxLendableImpactFactor",
+          "maxLendableImpactFactorForWithdrawals",
+          "maxLendableImpactUsd",
+          "lentPositionImpactPoolAmount",
+          "positionImpactExponentFactorPositive",
+          "positionImpactExponentFactorNegative",
+          "useOpenInterestInTokensForBalance",
+          "swapFeeFactorForBalanceWasImproved",
+          "swapFeeFactorForBalanceWasNotImproved",
+          "atomicSwapFeeFactor",
+          "swapImpactFactorPositive",
+          "swapImpactFactorNegative",
+          "swapImpactExponentFactor",
+          "virtualMarketId",
+          "virtualLongTokenId",
+          "virtualShortTokenId"
+        ],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "Omit_MarketInfoResponse.Exclude_MarketValuesFieldKey.marketTokenAddress__": {
+        "$ref": "#/components/schemas/Pick_MarketInfoResponse.Exclude_keyofMarketInfoResponse.Exclude_MarketValuesFieldKey.marketTokenAddress___",
+        "description": "Construct a type with the properties of T except for those in type K."
+      },
+      "MarketConfigResponse": {
+        "$ref": "#/components/schemas/Omit_MarketInfoResponse.Exclude_MarketValuesFieldKey.marketTokenAddress__"
+      },
+      "Pick_MarketInfoResponse.MarketValuesFieldKey_": {
+        "properties": {
+          "marketTokenAddress": {
+            "type": "string"
+          },
+          "longPoolAmount": {
+            "type": "string"
+          },
+          "shortPoolAmount": {
+            "type": "string"
+          },
+          "poolValueMax": {
+            "type": "string"
+          },
+          "poolValueMin": {
+            "type": "string"
+          },
+          "totalBorrowingFees": {
+            "type": "string"
+          },
+          "positionImpactPoolAmount": {
+            "type": "string"
+          },
+          "swapImpactPoolAmountLong": {
+            "type": "string"
+          },
+          "swapImpactPoolAmountShort": {
+            "type": "string"
+          },
+          "longInterestUsd": {
+            "type": "string"
+          },
+          "shortInterestUsd": {
+            "type": "string"
+          },
+          "longInterestInTokens": {
+            "type": "string"
+          },
+          "shortInterestInTokens": {
+            "type": "string"
+          },
+          "borrowingFactorPerSecondForLongs": {
+            "type": "string"
+          },
+          "borrowingFactorPerSecondForShorts": {
+            "type": "string"
+          },
+          "fundingFactorPerSecond": {
+            "type": "string"
+          },
+          "longsPayShorts": {
+            "type": "boolean"
+          },
+          "virtualPoolAmountForLongToken": {
+            "type": "string"
+          },
+          "virtualPoolAmountForShortToken": {
+            "type": "string"
+          },
+          "virtualInventoryForPositions": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "marketTokenAddress",
+          "longPoolAmount",
+          "shortPoolAmount",
+          "poolValueMax",
+          "poolValueMin",
+          "totalBorrowingFees",
+          "positionImpactPoolAmount",
+          "swapImpactPoolAmountLong",
+          "swapImpactPoolAmountShort",
+          "longInterestUsd",
+          "shortInterestUsd",
+          "longInterestInTokens",
+          "shortInterestInTokens",
+          "borrowingFactorPerSecondForLongs",
+          "borrowingFactorPerSecondForShorts",
+          "fundingFactorPerSecond",
+          "longsPayShorts",
+          "virtualPoolAmountForLongToken",
+          "virtualPoolAmountForShortToken",
+          "virtualInventoryForPositions"
+        ],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "MarketValuesResponse": {
+        "$ref": "#/components/schemas/Pick_MarketInfoResponse.MarketValuesFieldKey_"
+      },
       "GlvShiftParamsResponse": {
         "properties": {
           "minMarketTokens": {
@@ -2171,6 +2839,410 @@
           "1h",
           "1d"
         ]
+      },
+      "CrossChainDepositPrepareResponse": {
+        "properties": {
+          "expiresAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "nativeFee": {
+            "type": "string"
+          },
+          "composeGas": {
+            "type": "string"
+          },
+          "payload": {
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "data": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "data",
+              "to"
+            ],
+            "type": "object"
+          },
+          "payloadType": {
+            "type": "string",
+            "enum": [
+              "transaction"
+            ],
+            "nullable": false
+          }
+        },
+        "required": [
+          "expiresAt",
+          "nativeFee",
+          "composeGas",
+          "payload",
+          "payloadType"
+        ],
+        "type": "object"
+      },
+      "CrossChainDepositPrepareRequest": {
+        "properties": {
+          "innerData": {
+            "type": "string",
+            "description": "Optional extra payload appended to the LayerZero compose message (hex)."
+          },
+          "nativeDropAmount": {
+            "type": "string",
+            "description": "Optional native drop (gas) for the destination chain, in destination native decimals."
+          },
+          "nativeFee": {
+            "type": "string",
+            "description": "Optional; when omitted, server quotes Stargate `nativeFee` on the source chain."
+          },
+          "composeGas": {
+            "type": "string",
+            "description": "Optional client-supplied destination compose-gas hint; bypasses server quote."
+          },
+          "tokenKind": {
+            "type": "string",
+            "enum": [
+              "trade",
+              "platform"
+            ],
+            "description": "\"trade\" → `IStargate.sendToken` (default); \"platform\" → `IStargate.send`."
+          },
+          "isNativeOnSource": {
+            "type": "boolean",
+            "description": "Whether the source-chain token is the chain's native gas asset (ETH/BNB/etc.) —\nStargate auto-wraps it to WETH/WBNB on the source side. Optional override;\notherwise resolved from the registry."
+          },
+          "destinationStargatePoolAddress": {
+            "type": "string",
+            "description": "Optional override; otherwise resolved from the registry by symbol/token."
+          },
+          "sourceStargatePoolAddress": {
+            "type": "string",
+            "description": "Optional override; otherwise resolved from the registry by symbol/token."
+          },
+          "tokenAddress": {
+            "type": "string",
+            "description": "Token address on the settlement chain (alternative to `tokenSymbol`)."
+          },
+          "tokenSymbol": {
+            "type": "string",
+            "description": "Token identifier. Provide one of:\n - `tokenSymbol` (e.g. \"USDC\" | \"USDT\" | \"ETH\"), or\n - `tokenAddress` on the settlement chain.\nStargate pool addresses and source-side `isNativeOnSource` are resolved server-side."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Amount in token-native decimals as a base-10 string."
+          },
+          "account": {
+            "type": "string",
+            "description": "GMX account that will receive the deposit on the settlement chain."
+          },
+          "srcChainId": {
+            "type": "number",
+            "format": "double",
+            "description": "Source chain id (where the user holds funds and signs the bridge tx)."
+          }
+        },
+        "required": [
+          "amount",
+          "account",
+          "srcChainId"
+        ],
+        "type": "object"
+      },
+      "Record_string.unknown_": {
+        "properties": {},
+        "additionalProperties": {},
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "GasPaymentParamsDto": {
+        "properties": {
+          "gasPaymentTokenAmount": {
+            "type": "string"
+          },
+          "gasPaymentTokenAddress": {
+            "type": "string"
+          },
+          "relayerFeeAmount": {
+            "type": "string"
+          },
+          "relayerFeeTokenAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "gasPaymentTokenAmount",
+          "gasPaymentTokenAddress",
+          "relayerFeeAmount",
+          "relayerFeeTokenAddress"
+        ],
+        "type": "object"
+      },
+      "CrossChainWithdrawPrepareResponse": {
+        "properties": {
+          "expiresAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "payload": {
+            "properties": {
+              "gasPaymentParams": {
+                "$ref": "#/components/schemas/GasPaymentParamsDto"
+              },
+              "relayRouterAddress": {
+                "type": "string"
+              },
+              "relayParams": {
+                "$ref": "#/components/schemas/Record_string.unknown_"
+              },
+              "typedData": {
+                "properties": {
+                  "message": {
+                    "$ref": "#/components/schemas/Record_string.unknown_"
+                  },
+                  "primaryType": {
+                    "type": "string",
+                    "enum": [
+                      "BridgeOut"
+                    ],
+                    "nullable": false
+                  },
+                  "types": {
+                    "$ref": "#/components/schemas/Record_string._name-string--type-string_-Array_"
+                  },
+                  "domain": {
+                    "$ref": "#/components/schemas/Record_string.unknown_"
+                  }
+                },
+                "required": [
+                  "message",
+                  "primaryType",
+                  "types",
+                  "domain"
+                ],
+                "type": "object"
+              }
+            },
+            "required": [
+              "gasPaymentParams",
+              "relayRouterAddress",
+              "relayParams",
+              "typedData"
+            ],
+            "type": "object"
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Server-generated id; pass back to /submit and use for /status polling."
+          },
+          "payloadType": {
+            "type": "string",
+            "enum": [
+              "typed-data"
+            ],
+            "nullable": false
+          }
+        },
+        "required": [
+          "expiresAt",
+          "payload",
+          "requestId",
+          "payloadType"
+        ],
+        "type": "object"
+      },
+      "BridgeOutParamsDto": {
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "minAmountOut": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "provider",
+          "minAmountOut",
+          "amount",
+          "token"
+        ],
+        "type": "object"
+      },
+      "CrossChainWithdrawPrepareRequest": {
+        "properties": {
+          "gasPaymentToken": {
+            "type": "string",
+            "description": "Optional ERC-20 token to pay relayer fee in. Defaults to chain's gas-payment token."
+          },
+          "bridgeOutParams": {
+            "$ref": "#/components/schemas/BridgeOutParamsDto"
+          },
+          "account": {
+            "type": "string"
+          },
+          "srcChainId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "bridgeOutParams",
+          "account",
+          "srcChainId"
+        ],
+        "type": "object"
+      },
+      "CrossChainWithdrawSubmitResponse": {
+        "properties": {
+          "error": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "code"
+            ],
+            "type": "object"
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "relay_accepted",
+              "relay_failed"
+            ]
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "requestId"
+        ],
+        "type": "object"
+      },
+      "CrossChainWithdrawSubmitRequest": {
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "description": "Echo back the requestId from /prepare to link prepare→submit→status."
+          },
+          "relayerFeeAmount": {
+            "type": "string"
+          },
+          "relayerFeeTokenAddress": {
+            "type": "string"
+          },
+          "relayParamsPayload": {
+            "$ref": "#/components/schemas/Record_string.unknown_"
+          },
+          "bridgeOutParams": {
+            "$ref": "#/components/schemas/BridgeOutParamsDto"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          },
+          "srcChainId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "relayerFeeAmount",
+          "relayerFeeTokenAddress",
+          "relayParamsPayload",
+          "bridgeOutParams",
+          "signature",
+          "account",
+          "srcChainId"
+        ],
+        "type": "object"
+      },
+      "GmxAccountStatusResponse": {
+        "properties": {
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "error": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "code"
+            ],
+            "type": "object"
+          },
+          "gelatoStatusCode": {
+            "type": "number",
+            "format": "double"
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "txHash": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "updatedAt",
+          "createdAt",
+          "status",
+          "requestId"
+        ],
+        "type": "object"
+      },
+      "GmxAccountStatusRequest": {
+        "properties": {
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestId"
+        ],
+        "type": "object"
       },
       "BigIntToString_BuybackWeeklyStatsData_": {
         "properties": {
@@ -2338,6 +3410,144 @@
     "contact": {}
   },
   "paths": {
+    "/trades": {
+      "get": {
+        "operationId": "GetTrades",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradesListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Trades"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "address",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "symbol",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "marketAddress",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "until",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "actions",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/trades/search": {
+      "post": {
+        "operationId": "SearchTrades",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradesListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Trade history search supporting the same filters used by the GMX UI:\nmarketsDirections (per-tuple market+direction+collateral) and\norderEventCombinations (orderType+eventName+isDepositOrWithdraw+isTwap).",
+        "tags": [
+          "Trades"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TradesSearchRequest"
+              }
+            }
+          }
+        }
+      }
+    },
     "/tokens": {
       "get": {
         "operationId": "GetTokens",
@@ -3305,6 +4515,62 @@
         "parameters": []
       }
     },
+    "/markets/config": {
+      "get": {
+        "operationId": "GetMarketsConfig",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MarketConfigResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Markets"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/markets/values": {
+      "get": {
+        "operationId": "GetMarketsValues",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MarketValuesResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Markets"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
     "/jit/liquidity_info": {
       "get": {
         "operationId": "GetLiquidityInfo",
@@ -3383,6 +4649,167 @@
             }
           }
         ]
+      }
+    },
+    "/gmx-account/deposit/cross-chain/prepare": {
+      "post": {
+        "operationId": "PrepareCrossChainDeposit",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossChainDepositPrepareResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "GMX Account"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrossChainDepositPrepareRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gmx-account/withdraw/cross-chain/prepare": {
+      "post": {
+        "operationId": "PrepareCrossChainWithdraw",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossChainWithdrawPrepareResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "GMX Account"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrossChainWithdrawPrepareRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gmx-account/withdraw/cross-chain/submit": {
+      "post": {
+        "operationId": "SubmitCrossChainWithdraw",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossChainWithdrawSubmitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        },
+        "tags": [
+          "GMX Account"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrossChainWithdrawSubmitRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gmx-account/withdraw/cross-chain/status": {
+      "post": {
+        "operationId": "StatusCrossChainWithdraw",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmxAccountStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        },
+        "tags": [
+          "GMX Account"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GmxAccountStatusRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/buyback/weekly-stats": {

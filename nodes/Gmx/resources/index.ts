@@ -1,3 +1,4 @@
+export { tradesDescription } from './trades';
 export { tokensDescription } from './tokens';
 export { subaccountsDescription } from './subaccounts';
 export { stakingDescription } from './staking';
@@ -10,6 +11,7 @@ export { ordersDescription } from './orders';
 export { orderTransactionsDescription } from './order-transactions';
 export { marketsDescription } from './markets';
 export { jitDescription } from './jit';
+export { gmxAccountDescription } from './gmx-account';
 export { buybackDescription } from './buyback';
 export { balancesDescription } from './balances';
 export { apyDescription } from './apy';

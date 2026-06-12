@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 export const apyDescription: INodeProperties[] = [
-		{
+                {
 			"displayName": "Operation",
 			"name": "operation",
 			"type": "options",

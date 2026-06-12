@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 export const orderTransactionsDescription: INodeProperties[] = [
-		{
+                {
 			"displayName": "Operation",
 			"name": "operation",
 			"type": "options",
@@ -200,6 +200,54 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			"routing": {
 				"send": {
 					"property": "mode",
+					"propertyInDotNotation": false,
+					"type": "body",
+					"value": "={{ $value }}"
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Order Transactions"
+					],
+					"operation": [
+						"Prepare"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "UI Fee Receiver",
+			"name": "uiFeeReceiver",
+			"type": "string",
+			"default": "",
+			"routing": {
+				"send": {
+					"property": "uiFeeReceiver",
+					"propertyInDotNotation": false,
+					"type": "body",
+					"value": "={{ $value }}"
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Order Transactions"
+					],
+					"operation": [
+						"Prepare"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "Referral Code",
+			"name": "referralCode",
+			"type": "string",
+			"default": "",
+			"routing": {
+				"send": {
+					"property": "referralCode",
 					"propertyInDotNotation": false,
 					"type": "body",
 					"value": "={{ $value }}"
@@ -1479,6 +1527,30 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			"routing": {
 				"send": {
 					"property": "mode",
+					"propertyInDotNotation": false,
+					"type": "body",
+					"value": "={{ $value }}"
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Order Transactions"
+					],
+					"operation": [
+						"Collateral Prepare"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "UI Fee Receiver",
+			"name": "uiFeeReceiver",
+			"type": "string",
+			"default": "",
+			"routing": {
+				"send": {
+					"property": "uiFeeReceiver",
 					"propertyInDotNotation": false,
 					"type": "body",
 					"value": "={{ $value }}"

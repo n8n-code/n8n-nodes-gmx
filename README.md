@@ -13,7 +13,7 @@ Every time you connect n8n to gmx, you waste hours mapping endpoints, defining p
 
 **What if connecting n8n to gmx took 5 minutes, not half a day?**
 
-This node gives you **16+ resources** out of the box: **Tokens**, **Subaccounts**, **Staking**, **Rates**, **Prices**, and 11 more: with full CRUD operations, typed parameters, and zero manual configuration.
+This node gives you **18+ resources** out of the box: **Trades**, **Tokens**, **Subaccounts**, **Staking**, **Rates**, and 13 more: with full CRUD operations, typed parameters, and zero manual configuration.
 
 ---
 
@@ -52,6 +52,14 @@ That's it. No configuration files. No code. It just works.
 ---
 
 ## Resources
+
+<details>
+<summary><b>Trades</b> (2 operations)</summary>
+
+- Get Trades
+- Post Search Trades
+
+</details>
 
 <details>
 <summary><b>Tokens</b> (2 operations)</summary>
@@ -134,11 +142,13 @@ That's it. No configuration files. No code. It just works.
 </details>
 
 <details>
-<summary><b>Markets</b> (3 operations)</summary>
+<summary><b>Markets</b> (5 operations)</summary>
 
 - Get Markets
 - Get Markets Tickers
 - Get Markets Info
+- Get Markets Config
+- Get Markets Values
 
 </details>
 
@@ -147,6 +157,16 @@ That's it. No configuration files. No code. It just works.
 
 - Get Liquidity Info
 - Get Liquidity History
+
+</details>
+
+<details>
+<summary><b>GMX Account</b> (4 operations)</summary>
+
+- Post Prepare Cross Chain Deposit
+- Post Prepare Cross Chain Withdraw
+- Post Submit Cross Chain Withdraw
+- Post Status Cross Chain Withdraw
 
 </details>
 
@@ -205,13 +225,6 @@ When the gmx API updates, this node updates too.
 
 ---
 
-## Support This Project
-
-If this node saved you hours of work, consider supporting continued development, new APIs, better error handling, and faster updates.
-
-[![Keep It Moving.](https://crypto-donate.insidexofficial.workers.dev/eyJ0aXRsZSI6IktlZXAgSXQgTW92aW5nIiwiZGVzYyI6Ik9uZSBkZXZlbG9wZXIgYnVpbHQgYSB0b29sIHRoYXQgYXV0by1nZW5lcmF0ZXNcbm44biBub2RlcyBmcm9tIGFueSBPcGVuQVBJIHNwZWMuXG5cbllvdXIgZG9uYXRpb24gZnVuZHMgbmV3IGZlYXR1cmVzLCBtb3JlIEFQSSBzdXBwb3J0LFxuYW5kIGJldHRlciB0b29saW5nIGZvciBldmVyeSBkZXZlbG9wZXIgYWZ0ZXIgeW91LiIsInRhcmdldCI6NTAwMCwiYWRkcmVzc2VzIjp7ImV0aGVyZXVtIjoiMHhmMDU1NWQ0MGRiRkI0ZTNCZjA3MDQ0MjgyQjc4RjJmRTFmNTFFZjcyIiwic29sYW5hIjoiNlpEVk5BYmpZZExEcXo4cGt3VUNHYllaNVV3QlFranB0QzU1Wk5vTFcybVUifSwiZGlzY29yZCI6Imh0dHBzOi8vZGlzY29yZC5nZy9wdERaOGU0aDkzIn0/badge)](https://n8n-code.github.io/membership/#/eyJ0aXRsZSI6IktlZXAgSXQgTW92aW5nIiwiZGVzYyI6Ik9uZSBkZXZlbG9wZXIgYnVpbHQgYSB0b29sIHRoYXQgYXV0by1nZW5lcmF0ZXNcbm44biBub2RlcyBmcm9tIGFueSBPcGVuQVBJIHNwZWMuXG5cbllvdXIgZG9uYXRpb24gZnVuZHMgbmV3IGZlYXR1cmVzLCBtb3JlIEFQSSBzdXBwb3J0LFxuYW5kIGJldHRlciB0b29saW5nIGZvciBldmVyeSBkZXZlbG9wZXIgYWZ0ZXIgeW91LiIsInRhcmdldCI6NTAwMCwiYWRkcmVzc2VzIjp7ImV0aGVyZXVtIjoiMHhmMDU1NWQ0MGRiRkI0ZTNCZjA3MDQ0MjgyQjc4RjJmRTFmNTFFZjcyIiwic29sYW5hIjoiNlpEVk5BYmpZZExEcXo4cGt3VUNHYllaNVV3QlFranB0QzU1Wk5vTFcybVUifSwiZGlzY29yZCI6Imh0dHBzOi8vZGlzY29yZC5nZy9wdERaOGU0aDkzIn0)
-
----
 
 ## License
 

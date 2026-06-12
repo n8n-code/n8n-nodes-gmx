@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 export const marketsDescription: INodeProperties[] = [
-		{
+                {
 			"displayName": "Operation",
 			"name": "operation",
 			"type": "options",
@@ -47,6 +47,30 @@ export const marketsDescription: INodeProperties[] = [
 						"request": {
 							"method": "GET",
 							"url": "=/markets/info"
+						}
+					}
+				},
+				{
+					"name": "Get Markets Config",
+					"value": "Get Markets Config",
+					"action": "Get Markets Config",
+					"description": "",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/markets/config"
+						}
+					}
+				},
+				{
+					"name": "Get Markets Values",
+					"value": "Get Markets Values",
+					"action": "Get Markets Values",
+					"description": "",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/markets/values"
 						}
 					}
 				}
@@ -154,6 +178,44 @@ export const marketsDescription: INodeProperties[] = [
 					],
 					"operation": [
 						"Get Markets Info"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /markets/config",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Markets"
+					],
+					"operation": [
+						"Get Markets Config"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /markets/values",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Markets"
+					],
+					"operation": [
+						"Get Markets Values"
 					]
 				}
 			}
