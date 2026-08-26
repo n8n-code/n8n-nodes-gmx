@@ -1,7 +1,10 @@
+export { yieldDescription } from './yield';
 export { tradesDescription } from './trades';
 export { tokensDescription } from './tokens';
 export { subaccountsDescription } from './subaccounts';
 export { stakingDescription } from './staking';
+export { riskOracleDescription } from './risk-oracle';
+export { relayDescription } from './relay';
 export { ratesDescription } from './rates';
 export { pricesDescription } from './prices';
 export { positionsDescription } from './positions';

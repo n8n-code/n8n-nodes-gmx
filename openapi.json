@@ -7,6 +7,129 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "ApiParameterPeriod": {
+        "enum": [
+          "1d",
+          "7d",
+          "30d",
+          "90d",
+          "180d",
+          "1y",
+          "total"
+        ],
+        "type": "string"
+      },
+      "GmPoolYieldPnlWindow": {
+        "properties": {
+          "endTimestamp": {
+            "type": "number",
+            "format": "double",
+            "description": "Unix seconds."
+          },
+          "startTimestamp": {
+            "type": "number",
+            "format": "double",
+            "description": "Unix seconds; clamped to the pool's configured listing date when the pool is younger than the period."
+          },
+          "period": {
+            "$ref": "#/components/schemas/ApiParameterPeriod"
+          }
+        },
+        "required": [
+          "endTimestamp",
+          "startTimestamp",
+          "period"
+        ],
+        "type": "object"
+      },
+      "GmPoolYieldPnlComponents": {
+        "properties": {
+          "unrealizedPnlShortUsd": {
+            "type": "number",
+            "format": "double"
+          },
+          "unrealizedPnlLongUsd": {
+            "type": "number",
+            "format": "double"
+          },
+          "realizedPnlShortUsd": {
+            "type": "number",
+            "format": "double"
+          },
+          "realizedPnlLongUsd": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "unrealizedPnlShortUsd",
+          "unrealizedPnlLongUsd",
+          "realizedPnlShortUsd",
+          "realizedPnlLongUsd"
+        ],
+        "type": "object"
+      },
+      "GmPoolYieldPnlEntry": {
+        "properties": {
+          "components": {
+            "$ref": "#/components/schemas/GmPoolYieldPnlComponents",
+            "description": "Trader PnL breakdown; present only when includeComponents=true and the pool has indexed data."
+          },
+          "window": {
+            "$ref": "#/components/schemas/GmPoolYieldPnlWindow"
+          },
+          "timeWeightedPoolValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "USD."
+          },
+          "tradersPnlApr": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Annualized trader PnL over time-weighted pool value; same sign as `tradersPnlUsd`. Negate for the pool's yield impact."
+          },
+          "tradersPnlUsd": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Trader PnL in USD over the window, trader-perspective: positive means traders gained against the pool, negative means traders lost to the pool."
+          },
+          "feeApy": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Fee-only APY over the window; fee composition matches `baseApy` of `/apy`: trading, swap, liquidation, and borrowing fees, compounded; excludes incentives, trader PnL, and backing-token price changes."
+          },
+          "marketToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "window",
+          "timeWeightedPoolValue",
+          "tradersPnlApr",
+          "tradersPnlUsd",
+          "feeApy",
+          "marketToken"
+        ],
+        "type": "object"
+      },
+      "GmPoolsYieldPnlResponse": {
+        "properties": {
+          "pools": {
+            "items": {
+              "$ref": "#/components/schemas/GmPoolYieldPnlEntry"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "pools"
+        ],
+        "type": "object"
+      },
       "TradeActionResponse": {
         "properties": {
           "reasonBytes": {
@@ -290,9 +413,6 @@
             },
             "type": "array"
           },
-          "isStaking": {
-            "type": "boolean"
-          },
           "isPlatformTradingToken": {
             "type": "boolean"
           },
@@ -438,9 +558,6 @@
               "type": "string"
             },
             "type": "array"
-          },
-          "isStaking": {
-            "type": "boolean"
           },
           "isPlatformTradingToken": {
             "type": "boolean"
@@ -775,6 +892,145 @@
       "StakingPowerResponse": {
         "$ref": "#/components/schemas/BigIntToString_StakingPowerData_"
       },
+      "RiskOracleMarketResponse": {
+        "properties": {
+          "market_token": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "market_token",
+          "name"
+        ],
+        "type": "object"
+      },
+      "RelayStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "executed",
+          "reverted",
+          "failed",
+          "unknown"
+        ],
+        "description": "Lifecycle of a relay operation as reported by GMX Relay."
+      },
+      "RelaySubmitResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/RelayStatus"
+          },
+          "taskId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "taskId"
+        ],
+        "type": "object"
+      },
+      "RelaySubmitRequest": {
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "Bare relay-router calldata, including the user's EIP-712 signature and no Gelato fee suffix."
+          },
+          "to": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "to"
+        ],
+        "type": "object"
+      },
+      "RelayDebugResponse": {
+        "properties": {
+          "tenderlyUrl": {
+            "type": "string"
+          },
+          "calldata": {
+            "type": "string"
+          },
+          "errorData": {
+            "type": "string",
+            "nullable": true
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "blockNumber": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "account": {
+            "type": "string"
+          },
+          "operationType": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string",
+            "nullable": true
+          },
+          "chainId": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object"
+      },
+      "RelayStatusResponse": {
+        "properties": {
+          "debug": {
+            "$ref": "#/components/schemas/RelayDebugResponse",
+            "description": "The keeper's reproduction data, tenderly link included. A taskId is an unguessable capability:\nwhoever holds it may read the operation it names, matching how Gelato's task pages behaved."
+          },
+          "revertData": {
+            "type": "string",
+            "description": "Raw revert bytes when the chain produced any — public on-chain data the client can decode."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Failure detail when the relay has one; absent while the operation is in flight."
+          },
+          "txHash": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/RelayStatus"
+          },
+          "taskId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "taskId"
+        ],
+        "type": "object"
+      },
+      "RelayStatusRequest": {
+        "properties": {
+          "taskId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "taskId"
+        ],
+        "type": "object"
+      },
       "RatesSnapshotResponse": {
         "properties": {
           "timestamp": {
@@ -834,18 +1090,6 @@
           "$ref": "#/components/schemas/MarketRatesResponse"
         },
         "type": "array"
-      },
-      "ApiParameterPeriod": {
-        "enum": [
-          "1d",
-          "7d",
-          "30d",
-          "90d",
-          "180d",
-          "1y",
-          "total"
-        ],
-        "type": "string"
       },
       "OhlcvCandle": {
         "properties": {
@@ -907,6 +1151,10 @@
           },
           "updatedAtTime": {
             "type": "string"
+          },
+          "uiFeeFactor": {
+            "type": "string",
+            "nullable": true
           },
           "minOutputAmount": {
             "type": "string"
@@ -978,6 +1226,7 @@
           "srcChainId",
           "validFromTime",
           "updatedAtTime",
+          "uiFeeFactor",
           "minOutputAmount",
           "callbackGasLimit",
           "executionFee",
@@ -1094,6 +1343,9 @@
           "pendingImpactAmount": {
             "type": "string"
           },
+          "positionValueInUsd": {
+            "type": "string"
+          },
           "uiFeeAmount": {
             "type": "string"
           },
@@ -1180,6 +1432,7 @@
           "indexName",
           "data",
           "pendingImpactAmount",
+          "positionValueInUsd",
           "uiFeeAmount",
           "traderDiscountAmount",
           "positionFeeAmount",
@@ -1291,10 +1544,150 @@
         ],
         "type": "string"
       },
+      "TradingCapacityLimitingFactor": {
+        "type": "string",
+        "enum": [
+          "reserve",
+          "openInterest",
+          "both",
+          "notApplicable"
+        ]
+      },
+      "JitDataStatus": {
+        "type": "string",
+        "enum": [
+          "available",
+          "stale",
+          "unavailable"
+        ]
+      },
+      "MarketDataStatus": {
+        "type": "string",
+        "enum": [
+          "fresh",
+          "stale"
+        ]
+      },
+      "TradingCapacityResponse": {
+        "properties": {
+          "marketDataStatus": {
+            "$ref": "#/components/schemas/MarketDataStatus"
+          },
+          "jitDataStatus": {
+            "$ref": "#/components/schemas/JitDataStatus"
+          },
+          "limitingFactor": {
+            "$ref": "#/components/schemas/TradingCapacityLimitingFactor"
+          },
+          "jitAvailableLiquidity": {
+            "type": "string"
+          },
+          "baseAvailableLiquidity": {
+            "type": "string"
+          },
+          "availableLiquidity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "marketDataStatus",
+          "jitDataStatus",
+          "limitingFactor",
+          "jitAvailableLiquidity",
+          "baseAvailableLiquidity",
+          "availableLiquidity"
+        ],
+        "type": "object"
+      },
+      "OrderValidationWarningResponse": {
+        "anyOf": [
+          {
+            "properties": {
+              "details": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TradingCapacityResponse"
+                  },
+                  {
+                    "properties": {
+                      "requestedSizeUsd": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "requestedSizeUsd"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INSUFFICIENT_LIQUIDITY"
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "details",
+              "message",
+              "code"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "details": {
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "STALE_MARKET_DATA",
+                      "JIT_DATA_UNAVAILABLE",
+                      "JIT_ACCOUNT_ELIGIBILITY_UNKNOWN",
+                      "COLLATERAL_SWAP"
+                    ]
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "type": "object"
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string",
+                "enum": [
+                  "TRADING_CAPACITY_UNAVAILABLE"
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "details",
+              "message",
+              "code"
+            ],
+            "type": "object"
+          }
+        ]
+      },
       "PrepareResponse": {
         "properties": {
           "traceId": {
             "type": "string"
+          },
+          "validationWarnings": {
+            "items": {
+              "$ref": "#/components/schemas/OrderValidationWarningResponse"
+            },
+            "type": "array"
           },
           "warnings": {
             "items": {
@@ -1308,6 +1701,9 @@
           },
           "estimates": {
             "properties": {
+              "tradingCapacity": {
+                "$ref": "#/components/schemas/TradingCapacityResponse"
+              },
               "fundingFeeUsd": {
                 "type": "string"
               },
@@ -1369,6 +1765,100 @@
           "payloadType"
         ],
         "type": "object"
+      },
+      "PrepareErrorCode": {
+        "type": "string",
+        "enum": [
+          "INVALID_PARAMS",
+          "MARKET_NOT_FOUND",
+          "TOKEN_NOT_FOUND",
+          "NO_SWAP_PATH",
+          "POSITION_NOT_FOUND"
+        ]
+      },
+      "Record_string._message-string--value_63_-any__": {
+        "properties": {},
+        "additionalProperties": {
+          "properties": {
+            "value": {},
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message"
+          ],
+          "type": "object"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "PrepareErrorResponse": {
+        "anyOf": [
+          {
+            "properties": {
+              "details": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TradingCapacityResponse"
+                  },
+                  {
+                    "properties": {
+                      "requestedSizeUsd": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "requestedSizeUsd"
+                    ],
+                    "type": "object"
+                  }
+                ]
+              },
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INSUFFICIENT_LIQUIDITY"
+                ],
+                "nullable": false
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "details",
+              "code",
+              "message"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "code": {
+                "$ref": "#/components/schemas/PrepareErrorCode"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "message": {
+                "$ref": "#/components/schemas/Record_string._message-string--value_63_-any__"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          }
+        ]
       },
       "OrderKind": {
         "enum": [
@@ -1538,6 +2028,7 @@
           "relay_accepted",
           "relay_pending",
           "relay_submitted",
+          "relay_unknown",
           "created",
           "executed",
           "cancelled",
@@ -1633,7 +2124,8 @@
           },
           "gelatoStatusCode": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "deprecated": true
           },
           "taskId": {
             "type": "string"
@@ -1886,6 +2378,12 @@
       },
       "MarketTickerResponse": {
         "properties": {
+          "capacityShort": {
+            "$ref": "#/components/schemas/TradingCapacityResponse"
+          },
+          "capacityLong": {
+            "$ref": "#/components/schemas/TradingCapacityResponse"
+          },
           "netRateShort": {
             "type": "string"
           },
@@ -1969,6 +2467,8 @@
           }
         },
         "required": [
+          "capacityShort",
+          "capacityLong",
           "netRateShort",
           "netRateLong",
           "borrowingRateShort",
@@ -2013,6 +2513,9 @@
           "totalBorrowingFees": {
             "type": "string"
           },
+          "virtualInventoryForPositionsInTokens": {
+            "type": "string"
+          },
           "virtualInventoryForPositions": {
             "type": "string"
           },
@@ -2024,6 +2527,30 @@
           },
           "longsPayShorts": {
             "type": "boolean"
+          },
+          "shortInterestInTokensUsingShortToken": {
+            "type": "string"
+          },
+          "shortInterestInTokensUsingLongToken": {
+            "type": "string"
+          },
+          "longInterestInTokensUsingShortToken": {
+            "type": "string"
+          },
+          "longInterestInTokensUsingLongToken": {
+            "type": "string"
+          },
+          "shortInterestUsdUsingShortToken": {
+            "type": "string"
+          },
+          "shortInterestUsdUsingLongToken": {
+            "type": "string"
+          },
+          "longInterestUsdUsingShortToken": {
+            "type": "string"
+          },
+          "longInterestUsdUsingLongToken": {
+            "type": "string"
           },
           "shortInterestInTokens": {
             "type": "string"
@@ -2056,6 +2583,9 @@
             "type": "string"
           },
           "virtualLongTokenId": {
+            "type": "string"
+          },
+          "virtualIndexTokenId": {
             "type": "string"
           },
           "virtualMarketId": {
@@ -2118,10 +2648,16 @@
           "maxLendableImpactFactor": {
             "type": "string"
           },
-          "maxFundingFactorPerSecond": {
+          "maxFundingFactorPerSecondShort": {
             "type": "string"
           },
-          "minFundingFactorPerSecond": {
+          "maxFundingFactorPerSecondLong": {
+            "type": "string"
+          },
+          "minFundingFactorPerSecondShort": {
+            "type": "string"
+          },
+          "minFundingFactorPerSecondLong": {
             "type": "string"
           },
           "thresholdForDecreaseFunding": {
@@ -2131,6 +2667,9 @@
             "type": "string"
           },
           "fundingDecreaseFactorPerSecond": {
+            "type": "string"
+          },
+          "minFundingIncreaseRatePerSecond": {
             "type": "string"
           },
           "fundingIncreaseFactorPerSecond": {
@@ -2217,6 +2756,18 @@
           "minPositionImpactPoolAmount": {
             "type": "string"
           },
+          "maxCollateralSumShortTokenShort": {
+            "type": "string"
+          },
+          "maxCollateralSumShortTokenLong": {
+            "type": "string"
+          },
+          "maxCollateralSumLongTokenShort": {
+            "type": "string"
+          },
+          "maxCollateralSumLongTokenLong": {
+            "type": "string"
+          },
           "maxOpenInterestShort": {
             "type": "string"
           },
@@ -2268,6 +2819,7 @@
           "borrowingFactorPerSecondForLongs",
           "fundingFactorPerSecond",
           "totalBorrowingFees",
+          "virtualInventoryForPositionsInTokens",
           "virtualInventoryForPositions",
           "virtualPoolAmountForShortToken",
           "virtualPoolAmountForLongToken",
@@ -2283,6 +2835,7 @@
           "longPoolAmount",
           "virtualShortTokenId",
           "virtualLongTokenId",
+          "virtualIndexTokenId",
           "virtualMarketId",
           "maxShortPoolUsdForDeposit",
           "maxLongPoolUsdForDeposit",
@@ -2301,11 +2854,14 @@
           "maxLendableImpactUsd",
           "maxLendableImpactFactorForWithdrawals",
           "maxLendableImpactFactor",
-          "maxFundingFactorPerSecond",
-          "minFundingFactorPerSecond",
+          "maxFundingFactorPerSecondShort",
+          "maxFundingFactorPerSecondLong",
+          "minFundingFactorPerSecondShort",
+          "minFundingFactorPerSecondLong",
           "thresholdForDecreaseFunding",
           "thresholdForStableFunding",
           "fundingDecreaseFactorPerSecond",
+          "minFundingIncreaseRatePerSecond",
           "fundingIncreaseFactorPerSecond",
           "fundingExponentFactor",
           "fundingFactor",
@@ -2330,6 +2886,10 @@
           "swapImpactPoolAmountLong",
           "positionImpactPoolDistributionRate",
           "minPositionImpactPoolAmount",
+          "maxCollateralSumShortTokenShort",
+          "maxCollateralSumShortTokenLong",
+          "maxCollateralSumLongTokenShort",
+          "maxCollateralSumLongTokenLong",
           "maxOpenInterestShort",
           "maxOpenInterestLong",
           "openInterestReserveFactorShort",
@@ -2407,6 +2967,18 @@
           "maxOpenInterestShort": {
             "type": "string"
           },
+          "maxCollateralSumLongTokenLong": {
+            "type": "string"
+          },
+          "maxCollateralSumLongTokenShort": {
+            "type": "string"
+          },
+          "maxCollateralSumShortTokenLong": {
+            "type": "string"
+          },
+          "maxCollateralSumShortTokenShort": {
+            "type": "string"
+          },
           "borrowingFactorLong": {
             "type": "string"
           },
@@ -2428,6 +3000,9 @@
           "fundingIncreaseFactorPerSecond": {
             "type": "string"
           },
+          "minFundingIncreaseRatePerSecond": {
+            "type": "string"
+          },
           "fundingDecreaseFactorPerSecond": {
             "type": "string"
           },
@@ -2437,10 +3012,16 @@
           "thresholdForDecreaseFunding": {
             "type": "string"
           },
-          "minFundingFactorPerSecond": {
+          "minFundingFactorPerSecondLong": {
             "type": "string"
           },
-          "maxFundingFactorPerSecond": {
+          "minFundingFactorPerSecondShort": {
+            "type": "string"
+          },
+          "maxFundingFactorPerSecondLong": {
+            "type": "string"
+          },
+          "maxFundingFactorPerSecondShort": {
             "type": "string"
           },
           "minPositionImpactPoolAmount": {
@@ -2548,6 +3129,9 @@
           "virtualMarketId": {
             "type": "string"
           },
+          "virtualIndexTokenId": {
+            "type": "string"
+          },
           "virtualLongTokenId": {
             "type": "string"
           },
@@ -2575,6 +3159,10 @@
           "openInterestReserveFactorShort",
           "maxOpenInterestLong",
           "maxOpenInterestShort",
+          "maxCollateralSumLongTokenLong",
+          "maxCollateralSumLongTokenShort",
+          "maxCollateralSumShortTokenLong",
+          "maxCollateralSumShortTokenShort",
           "borrowingFactorLong",
           "borrowingFactorShort",
           "borrowingExponentFactorLong",
@@ -2582,11 +3170,14 @@
           "fundingFactor",
           "fundingExponentFactor",
           "fundingIncreaseFactorPerSecond",
+          "minFundingIncreaseRatePerSecond",
           "fundingDecreaseFactorPerSecond",
           "thresholdForStableFunding",
           "thresholdForDecreaseFunding",
-          "minFundingFactorPerSecond",
-          "maxFundingFactorPerSecond",
+          "minFundingFactorPerSecondLong",
+          "minFundingFactorPerSecondShort",
+          "maxFundingFactorPerSecondLong",
+          "maxFundingFactorPerSecondShort",
           "minPositionImpactPoolAmount",
           "positionImpactPoolDistributionRate",
           "minCollateralFactor",
@@ -2616,6 +3207,7 @@
           "swapImpactFactorNegative",
           "swapImpactExponentFactor",
           "virtualMarketId",
+          "virtualIndexTokenId",
           "virtualLongTokenId",
           "virtualShortTokenId"
         ],
@@ -2670,6 +3262,30 @@
           "shortInterestInTokens": {
             "type": "string"
           },
+          "longInterestUsdUsingLongToken": {
+            "type": "string"
+          },
+          "longInterestUsdUsingShortToken": {
+            "type": "string"
+          },
+          "shortInterestUsdUsingLongToken": {
+            "type": "string"
+          },
+          "shortInterestUsdUsingShortToken": {
+            "type": "string"
+          },
+          "longInterestInTokensUsingLongToken": {
+            "type": "string"
+          },
+          "longInterestInTokensUsingShortToken": {
+            "type": "string"
+          },
+          "shortInterestInTokensUsingLongToken": {
+            "type": "string"
+          },
+          "shortInterestInTokensUsingShortToken": {
+            "type": "string"
+          },
           "borrowingFactorPerSecondForLongs": {
             "type": "string"
           },
@@ -2689,6 +3305,9 @@
             "type": "string"
           },
           "virtualInventoryForPositions": {
+            "type": "string"
+          },
+          "virtualInventoryForPositionsInTokens": {
             "type": "string"
           }
         },
@@ -2712,13 +3331,31 @@
           "longsPayShorts",
           "virtualPoolAmountForLongToken",
           "virtualPoolAmountForShortToken",
-          "virtualInventoryForPositions"
+          "virtualInventoryForPositions",
+          "virtualInventoryForPositionsInTokens"
         ],
         "type": "object",
         "description": "From T, pick a set of properties whose keys are in the union K"
       },
       "MarketValuesResponse": {
-        "$ref": "#/components/schemas/Pick_MarketInfoResponse.MarketValuesFieldKey_"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Pick_MarketInfoResponse.MarketValuesFieldKey_"
+          },
+          {
+            "properties": {
+              "updatedAt": {
+                "type": "number",
+                "format": "double",
+                "nullable": true
+              }
+            },
+            "required": [
+              "updatedAt"
+            ],
+            "type": "object"
+          }
+        ]
       },
       "GlvShiftParamsResponse": {
         "properties": {
@@ -2794,10 +3431,12 @@
       "JitLiquiditySnapshotResponse": {
         "properties": {
           "shortLiquidityUsd": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "longLiquidityUsd": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
             "type": "number",
@@ -3210,7 +3849,8 @@
           },
           "gelatoStatusCode": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "deprecated": true
           },
           "taskId": {
             "type": "string"
@@ -3410,6 +4050,64 @@
     "contact": {}
   },
   "paths": {
+    "/yield/gm-pools": {
+      "get": {
+        "operationId": "GetGmPoolsYieldPnl",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmPoolsYieldPnlResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid pool address"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Fee-only APY plus trader PnL for GM pools, one row per GM market token.\nMetrics are null when the pool has no indexed data for the window; young pools are annualized over their listed window; unknown pool addresses in the pools filter are ignored.\nWindow timestamps are hour-aligned to the indexer's snapshots; responses are served from a cached snapshot — window.endTimestamp reports its freshness.",
+        "tags": [
+          "Yield"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ApiParameterPeriod"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pools",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "includeComponents",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ]
+      }
+    },
     "/trades": {
       "get": {
         "operationId": "GetTrades",
@@ -3709,6 +4407,123 @@
             }
           }
         ]
+      }
+    },
+    "/risk-oracle/markets": {
+      "get": {
+        "operationId": "GetMarkets",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RiskOracleMarketResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway - risk oracle request failed"
+          },
+          "503": {
+            "description": "Service Unavailable - risk oracle not configured for this chain"
+          }
+        },
+        "description": "Active GMX markets for this deployment's chain, proxied from the risk-oracle.\nEach entry is the config display name and the onchain market token it resolved to.",
+        "tags": [
+          "Risk Oracle"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/relay/submit": {
+      "post": {
+        "operationId": "Submit",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelaySubmitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Relay Unavailable"
+          }
+        },
+        "tags": [
+          "Relay"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelaySubmitRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/relay/status": {
+      "post": {
+        "operationId": "Status",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelayStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Relay Unavailable"
+          }
+        },
+        "tags": [
+          "Relay"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelayStatusRequest"
+              }
+            }
+          }
+        }
       }
     },
     "/rates": {
@@ -4192,7 +5007,17 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrepareErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
           },
           "500": {
             "description": "Internal Server Error"
@@ -4232,8 +5057,14 @@
           "400": {
             "description": "Bad Request"
           },
+          "429": {
+            "description": "Too Many Requests"
+          },
           "500": {
             "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Relay Unavailable"
           }
         },
         "tags": [
@@ -4482,6 +5313,58 @@
               "items": {
                 "type": "string"
               }
+            }
+          }
+        ]
+      }
+    },
+    "/markets/trading-capacity": {
+      "get": {
+        "operationId": "GetTradingCapacity",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradingCapacityResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid market symbol or direction"
+          },
+          "404": {
+            "description": "Market not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "tags": [
+          "Markets"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "symbol",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "long",
+                "short"
+              ]
             }
           }
         ]

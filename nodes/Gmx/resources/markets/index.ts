@@ -39,6 +39,18 @@ export const marketsDescription: INodeProperties[] = [
 					}
 				},
 				{
+					"name": "Get Trading Capacity",
+					"value": "Get Trading Capacity",
+					"action": "Get Trading Capacity",
+					"description": "",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/markets/trading-capacity"
+						}
+					}
+				},
+				{
 					"name": "Get Markets Info",
 					"value": "Get Markets Info",
 					"action": "Get Markets Info",
@@ -159,6 +171,85 @@ export const marketsDescription: INodeProperties[] = [
 					],
 					"operation": [
 						"Get Markets Tickers"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /markets/trading-capacity",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Markets"
+					],
+					"operation": [
+						"Get Trading Capacity"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "Symbol",
+			"name": "symbol",
+			"required": true,
+			"default": "",
+			"type": "string",
+			"routing": {
+				"send": {
+					"type": "query",
+					"property": "symbol",
+					"value": "={{ $value }}",
+					"propertyInDotNotation": false
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Markets"
+					],
+					"operation": [
+						"Get Trading Capacity"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "Direction",
+			"name": "direction",
+			"required": true,
+			"default": "long",
+			"type": "options",
+			"options": [
+				{
+					"name": "Long",
+					"value": "long"
+				},
+				{
+					"name": "Short",
+					"value": "short"
+				}
+			],
+			"routing": {
+				"send": {
+					"type": "query",
+					"property": "direction",
+					"value": "={{ $value }}",
+					"propertyInDotNotation": false
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Markets"
+					],
+					"operation": [
+						"Get Trading Capacity"
 					]
 				}
 			}

@@ -1,8 +1,11 @@
 import { NodeConnectionTypes, type INodeType, type INodeTypeDescription } from 'n8n-workflow';
+import { yieldDescription } from './resources/yield';
 import { tradesDescription } from './resources/trades';
 import { tokensDescription } from './resources/tokens';
 import { subaccountsDescription } from './resources/subaccounts';
 import { stakingDescription } from './resources/staking';
+import { riskOracleDescription } from './resources/risk-oracle';
+import { relayDescription } from './resources/relay';
 import { ratesDescription } from './resources/rates';
 import { pricesDescription } from './resources/prices';
 import { positionsDescription } from './resources/positions';
@@ -52,6 +55,11 @@ export class Gmx implements INodeType {
 			"noDataExpression": true,
 			"options": [
 				{
+					"name": "Yield",
+					"value": "Yield",
+					"description": ""
+				},
+				{
 					"name": "Trades",
 					"value": "Trades",
 					"description": ""
@@ -69,6 +77,16 @@ export class Gmx implements INodeType {
 				{
 					"name": "Staking",
 					"value": "Staking",
+					"description": ""
+				},
+				{
+					"name": "Risk Oracle",
+					"value": "Risk Oracle",
+					"description": ""
+				},
+				{
+					"name": "Relay",
+					"value": "Relay",
 					"description": ""
 				},
 				{
@@ -144,10 +162,13 @@ export class Gmx implements INodeType {
 			],
 			"default": ""
 		},
+		...yieldDescription,
 		...tradesDescription,
 		...tokensDescription,
 		...subaccountsDescription,
 		...stakingDescription,
+		...riskOracleDescription,
+		...relayDescription,
 		...ratesDescription,
 		...pricesDescription,
 		...positionsDescription,
