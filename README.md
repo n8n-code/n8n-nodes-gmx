@@ -13,7 +13,7 @@ Every time you connect n8n to gmx, you waste hours mapping endpoints, defining p
 
 **What if connecting n8n to gmx took 5 minutes, not half a day?**
 
-This node gives you **21+ resources** out of the box: **Yield**, **Trades**, **Tokens**, **Subaccounts**, **Staking**, and 16 more: with full CRUD operations, typed parameters, and zero manual configuration.
+This node gives you **22+ resources** out of the box: **Yield**, **Trades**, **Tokens**, **Subaccounts**, **Stats**, and 17 more: with full CRUD operations, typed parameters, and zero manual configuration.
 
 ---
 
@@ -54,9 +54,10 @@ That's it. No configuration files. No code. It just works.
 ## Resources
 
 <details>
-<summary><b>Yield</b> (1 operations)</summary>
+<summary><b>Yield</b> (2 operations)</summary>
 
 - Get Gm Pools Yield Pnl
+- Get Gm User Earnings
 
 </details>
 
@@ -81,6 +82,15 @@ That's it. No configuration files. No code. It just works.
 
 - Post Fetch Status
 - Post Prepare Approval
+
+</details>
+
+<details>
+<summary><b>Stats</b> (3 operations)</summary>
+
+- Get Summary
+- Get Timeseries
+- Get Sources
 
 </details>
 

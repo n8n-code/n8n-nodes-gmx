@@ -66,7 +66,7 @@ export const relayDescription: INodeProperties[] = [
 			"name": "data",
 			"type": "string",
 			"default": "",
-			"description": "Bare relay-router calldata, including the user's EIP-712 signature and no Gelato fee suffix.",
+			"description": "Bare relay-router calldata, including the user's EIP-712 signature, with nothing appended.",
 			"routing": {
 				"send": {
 					"property": "data",

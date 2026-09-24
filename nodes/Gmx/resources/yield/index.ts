@@ -25,6 +25,18 @@ export const yieldDescription: INodeProperties[] = [
 							"url": "=/yield/gm-pools"
 						}
 					}
+				},
+				{
+					"name": "Get Gm User Earnings",
+					"value": "Get Gm User Earnings",
+					"action": "Get Gm User Earnings",
+					"description": "Lifetime and last-7-day LP fee earnings of one wallet, one row per GM market token it has ever held; pools that were delisted since are included.\nUSD values are 30-decimal fixed-point integers encoded as strings. Fees are attributed to GM held in the wallet on this chain; GM in a GMX Account or bridged to another chain is not attributed.",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/yield/gm-user-earnings"
+						}
+					}
 				}
 			],
 			"default": ""
@@ -146,6 +158,50 @@ export const yieldDescription: INodeProperties[] = [
 					],
 					"operation": [
 						"Get Gm Pools Yield Pnl"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /yield/gm-user-earnings",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Yield"
+					],
+					"operation": [
+						"Get Gm User Earnings"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "Account",
+			"name": "account",
+			"required": true,
+			"default": "",
+			"type": "string",
+			"routing": {
+				"send": {
+					"type": "query",
+					"property": "account",
+					"value": "={{ $value }}",
+					"propertyInDotNotation": false
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Yield"
+					],
+					"operation": [
+						"Get Gm User Earnings"
 					]
 				}
 			}

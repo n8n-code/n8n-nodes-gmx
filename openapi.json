@@ -130,6 +130,67 @@
         ],
         "type": "object"
       },
+      "BigIntToString_GmUserEarningsData_": {
+        "properties": {
+          "pools": {
+            "items": {
+              "properties": {
+                "marketToken": {
+                  "type": "string"
+                },
+                "recent7dFeeUsd": {
+                  "type": "string"
+                },
+                "lifetimeFeeUsd": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "marketToken",
+                "recent7dFeeUsd",
+                "lifetimeFeeUsd"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "window": {
+            "properties": {
+              "endTimestamp": {
+                "type": "number",
+                "format": "double"
+              },
+              "startTimestamp": {
+                "type": "number",
+                "format": "double"
+              },
+              "days": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "endTimestamp",
+              "startTimestamp",
+              "days"
+            ],
+            "type": "object"
+          },
+          "account": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pools",
+          "window",
+          "account"
+        ],
+        "type": "object",
+        "description": "Recursively converts bigint types to string types in a type definition.\nHandles primitives, objects, arrays, and nested structures.\nPreserves Date type as-is."
+      },
+      "GmUserEarningsResponse": {
+        "$ref": "#/components/schemas/BigIntToString_GmUserEarningsData_"
+      },
       "TradeActionResponse": {
         "properties": {
           "reasonBytes": {
@@ -827,6 +888,597 @@
         ],
         "type": "object"
       },
+      "Completeness": {
+        "type": "string",
+        "enum": [
+          "complete",
+          "partial"
+        ]
+      },
+      "Network": {
+        "type": "string",
+        "enum": [
+          "arbitrum",
+          "avalanche",
+          "megaeth",
+          "solana"
+        ]
+      },
+      "Version": {
+        "type": "string",
+        "enum": [
+          "v1",
+          "v2"
+        ]
+      },
+      "MetricGroup": {
+        "type": "string",
+        "enum": [
+          "volume",
+          "volume24h",
+          "openInterest",
+          "fees",
+          "fees24h",
+          "revenue",
+          "tvl",
+          "users",
+          "trades"
+        ]
+      },
+      "SourceHealth": {
+        "type": "string",
+        "enum": [
+          "fresh",
+          "stale",
+          "missing"
+        ]
+      },
+      "SourceStatus": {
+        "properties": {
+          "lastError": {
+            "type": "string",
+            "nullable": true
+          },
+          "lagSeconds": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "health": {
+            "$ref": "#/components/schemas/SourceHealth"
+          },
+          "fetchedAt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "asOf": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/MetricGroup"
+            },
+            "type": "array"
+          },
+          "version": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "network": {
+            "$ref": "#/components/schemas/Network"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "lastError",
+          "lagSeconds",
+          "health",
+          "fetchedAt",
+          "asOf",
+          "metrics",
+          "version",
+          "network",
+          "id"
+        ],
+        "type": "object"
+      },
+      "SourceStatusResponse": {
+        "$ref": "#/components/schemas/SourceStatus"
+      },
+      "SummaryMetaResponse": {
+        "properties": {
+          "schemaVersion": {
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceStatusResponse"
+            },
+            "type": "array"
+          },
+          "completeness": {
+            "$ref": "#/components/schemas/Completeness"
+          },
+          "asOf": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "sources",
+          "completeness",
+          "asOf"
+        ],
+        "type": "object"
+      },
+      "Usd": {
+        "type": "string"
+      },
+      "VolumeResponse": {
+        "properties": {
+          "lpFlows": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "total": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "swaps": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "perps": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "lpFlows",
+          "total",
+          "swaps",
+          "perps"
+        ],
+        "type": "object"
+      },
+      "OpenInterestResponse": {
+        "properties": {
+          "total": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "short": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "long": {
+            "$ref": "#/components/schemas/Usd"
+          }
+        },
+        "required": [
+          "total",
+          "short",
+          "long"
+        ],
+        "type": "object"
+      },
+      "FeesResponse": {
+        "properties": {
+          "total": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "swap": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "trading": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "total",
+          "swap",
+          "trading"
+        ],
+        "type": "object"
+      },
+      "BuybackToken": {
+        "type": "string",
+        "enum": [
+          "GMX",
+          "GT"
+        ]
+      },
+      "RevenueResponse": {
+        "properties": {
+          "treasury": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "buybackToken": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BuybackToken"
+              }
+            ],
+            "nullable": true
+          },
+          "buyback": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "lp": {
+            "$ref": "#/components/schemas/Usd"
+          }
+        },
+        "required": [
+          "treasury",
+          "protocol",
+          "buybackToken",
+          "buyback",
+          "lp"
+        ],
+        "type": "object"
+      },
+      "TvlResponse": {
+        "properties": {
+          "valuedAt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "poolsValuedAt": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "total": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "store": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Usd"
+              }
+            ],
+            "nullable": true
+          },
+          "glv": {
+            "$ref": "#/components/schemas/Usd"
+          },
+          "pools": {
+            "$ref": "#/components/schemas/Usd"
+          }
+        },
+        "required": [
+          "valuedAt",
+          "poolsValuedAt",
+          "total",
+          "store",
+          "glv",
+          "pools"
+        ],
+        "type": "object"
+      },
+      "UsersResponse": {
+        "properties": {
+          "distinctness": {
+            "type": "string",
+            "enum": [
+              "source"
+            ],
+            "nullable": false,
+            "description": "Sum of per-source counts: a wallet counts once per source it is active on, so once per version and network."
+          },
+          "all": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "lps": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "traders": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "required": [
+          "distinctness",
+          "all",
+          "lps",
+          "traders"
+        ],
+        "type": "object"
+      },
+      "TradesResponse": {
+        "properties": {
+          "total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "swaps": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "perps": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "required": [
+          "total",
+          "swaps",
+          "perps"
+        ],
+        "type": "object"
+      },
+      "MetricSetResponse": {
+        "properties": {
+          "trades": {
+            "$ref": "#/components/schemas/TradesResponse"
+          },
+          "users": {
+            "$ref": "#/components/schemas/UsersResponse"
+          },
+          "tvl": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TvlResponse"
+              }
+            ],
+            "nullable": true
+          },
+          "revenue": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RevenueResponse"
+              }
+            ],
+            "nullable": true
+          },
+          "fees24h": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FeesResponse"
+              }
+            ],
+            "nullable": true
+          },
+          "fees": {
+            "$ref": "#/components/schemas/FeesResponse"
+          },
+          "openInterest": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenInterestResponse"
+              }
+            ],
+            "nullable": true
+          },
+          "volume24h": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/VolumeResponse"
+              }
+            ],
+            "nullable": true
+          },
+          "volume": {
+            "$ref": "#/components/schemas/VolumeResponse"
+          }
+        },
+        "required": [
+          "trades",
+          "users",
+          "tvl",
+          "revenue",
+          "fees24h",
+          "fees",
+          "openInterest",
+          "volume24h",
+          "volume"
+        ],
+        "type": "object"
+      },
+      "Partial_Record_Network.MetricSetResponse__": {
+        "properties": {
+          "arbitrum": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          },
+          "avalanche": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          },
+          "megaeth": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          },
+          "solana": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          }
+        },
+        "type": "object",
+        "description": "Make all properties in T optional"
+      },
+      "Partial_Record_Version.MetricSetResponse__": {
+        "properties": {
+          "v1": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          },
+          "v2": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          }
+        },
+        "type": "object",
+        "description": "Make all properties in T optional"
+      },
+      "SummaryResponse": {
+        "properties": {
+          "byVersion": {
+            "$ref": "#/components/schemas/Partial_Record_Version.MetricSetResponse__"
+          },
+          "byNetwork": {
+            "$ref": "#/components/schemas/Partial_Record_Network.MetricSetResponse__"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/MetricSetResponse"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SummaryMetaResponse"
+          }
+        },
+        "required": [
+          "byVersion",
+          "byNetwork",
+          "totals",
+          "meta"
+        ],
+        "type": "object"
+      },
+      "TimeseriesMetric": {
+        "type": "string",
+        "enum": [
+          "volume.perps",
+          "volume.swaps",
+          "volume.total",
+          "fees.trading",
+          "fees.swap",
+          "fees.total",
+          "revenue.protocol",
+          "revenue.lp",
+          "trades.perps",
+          "trades.swaps",
+          "users.active"
+        ]
+      },
+      "TimeseriesGroupBy": {
+        "type": "string",
+        "enum": [
+          "network",
+          "version",
+          "none"
+        ]
+      },
+      "TimeseriesPointResponse": {
+        "properties": {
+          "provisional": {
+            "type": "boolean"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "format": "double"
+              }
+            ],
+            "nullable": true
+          },
+          "day": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "provisional",
+          "value",
+          "day"
+        ],
+        "type": "object"
+      },
+      "TimeseriesGroupResponse": {
+        "properties": {
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TimeseriesPointResponse"
+            },
+            "type": "array"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "points",
+          "key"
+        ],
+        "type": "object"
+      },
+      "TimeseriesResponse": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/TimeseriesGroupResponse"
+            },
+            "type": "array"
+          },
+          "groupBy": {
+            "$ref": "#/components/schemas/TimeseriesGroupBy"
+          },
+          "interval": {
+            "type": "string",
+            "enum": [
+              "1d"
+            ],
+            "nullable": false
+          },
+          "metric": {
+            "$ref": "#/components/schemas/TimeseriesMetric"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SummaryMetaResponse"
+          }
+        },
+        "required": [
+          "groups",
+          "groupBy",
+          "interval",
+          "metric",
+          "meta"
+        ],
+        "type": "object"
+      },
       "BigIntToString_StakingPowerData_": {
         "properties": {
           "loyaltyTrackingStart": {
@@ -937,7 +1589,7 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "Bare relay-router calldata, including the user's EIP-712 signature and no Gelato fee suffix."
+            "description": "Bare relay-router calldata, including the user's EIP-712 signature, with nothing appended."
           },
           "to": {
             "type": "string"
@@ -994,7 +1646,7 @@
         "properties": {
           "debug": {
             "$ref": "#/components/schemas/RelayDebugResponse",
-            "description": "The keeper's reproduction data, tenderly link included. A taskId is an unguessable capability:\nwhoever holds it may read the operation it names, matching how Gelato's task pages behaved."
+            "description": "The keeper's reproduction data, tenderly link included. A taskId is an unguessable capability:\nwhoever holds it may read the operation it names."
           },
           "revertData": {
             "type": "string",
@@ -2121,11 +2773,6 @@
               "code"
             ],
             "type": "object"
-          },
-          "gelatoStatusCode": {
-            "type": "number",
-            "format": "double",
-            "deprecated": true
           },
           "taskId": {
             "type": "string"
@@ -3847,11 +4494,6 @@
             ],
             "type": "object"
           },
-          "gelatoStatusCode": {
-            "type": "number",
-            "format": "double",
-            "deprecated": true
-          },
           "taskId": {
             "type": "string"
           },
@@ -3886,6 +4528,34 @@
       },
       "BigIntToString_BuybackWeeklyStatsData_": {
         "properties": {
+          "months": {
+            "items": {
+              "properties": {
+                "cumulativeAccrued": {
+                  "type": "string"
+                },
+                "monthlyAccrued": {
+                  "type": "string"
+                },
+                "monthEnd": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "monthStart": {
+                  "type": "number",
+                  "format": "double"
+                }
+              },
+              "required": [
+                "cumulativeAccrued",
+                "monthlyAccrued",
+                "monthEnd",
+                "monthStart"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
           "weeks": {
             "items": {
               "properties": {
@@ -3936,6 +4606,7 @@
           }
         },
         "required": [
+          "months",
           "weeks",
           "summary"
         ],
@@ -4103,6 +4774,44 @@
             "schema": {
               "default": false,
               "type": "boolean"
+            }
+          }
+        ]
+      }
+    },
+    "/yield/gm-user-earnings": {
+      "get": {
+        "operationId": "GetGmUserEarnings",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GmUserEarningsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid account address"
+          },
+          "503": {
+            "description": "Earnings data is not available or still warming up"
+          }
+        },
+        "description": "Lifetime and last-7-day LP fee earnings of one wallet, one row per GM market token it has ever held; pools that were delisted since are included.\nUSD values are 30-decimal fixed-point integers encoded as strings. Fees are attributed to GM held in the wallet on this chain; GM in a GMX Account or bridged to another chain is not attributed.",
+        "tags": [
+          "Yield"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ]
@@ -4370,6 +5079,179 @@
             }
           }
         }
+      }
+    },
+    "/stats/summary": {
+      "get": {
+        "operationId": "GetSummary",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown network or version"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Protocol stats are not available on this deployment"
+          }
+        },
+        "tags": [
+          "Stats"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "networks",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Network"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "versions",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Version"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "/stats/timeseries": {
+      "get": {
+        "operationId": "GetTimeseries",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeseriesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unknown metric, network, version or timestamp"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Protocol stats are not available on this deployment"
+          }
+        },
+        "tags": [
+          "Stats"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "metric",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TimeseriesMetric"
+            }
+          },
+          {
+            "in": "query",
+            "name": "groupBy",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeseriesGroupBy"
+            }
+          },
+          {
+            "in": "query",
+            "name": "networks",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Network"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "versions",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Version"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/stats/sources": {
+      "get": {
+        "operationId": "GetSources",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SourceStatusResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Protocol stats are not available on this deployment"
+          }
+        },
+        "tags": [
+          "Stats"
+        ],
+        "security": [],
+        "parameters": []
       }
     },
     "/staking/power": {

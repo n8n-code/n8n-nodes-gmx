@@ -2,6 +2,7 @@ export { yieldDescription } from './yield';
 export { tradesDescription } from './trades';
 export { tokensDescription } from './tokens';
 export { subaccountsDescription } from './subaccounts';
+export { statsDescription } from './stats';
 export { stakingDescription } from './staking';
 export { riskOracleDescription } from './risk-oracle';
 export { relayDescription } from './relay';

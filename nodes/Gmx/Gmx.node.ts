@@ -3,6 +3,7 @@ import { yieldDescription } from './resources/yield';
 import { tradesDescription } from './resources/trades';
 import { tokensDescription } from './resources/tokens';
 import { subaccountsDescription } from './resources/subaccounts';
+import { statsDescription } from './resources/stats';
 import { stakingDescription } from './resources/staking';
 import { riskOracleDescription } from './resources/risk-oracle';
 import { relayDescription } from './resources/relay';
@@ -72,6 +73,11 @@ export class Gmx implements INodeType {
 				{
 					"name": "Subaccounts",
 					"value": "Subaccounts",
+					"description": ""
+				},
+				{
+					"name": "Stats",
+					"value": "Stats",
 					"description": ""
 				},
 				{
@@ -166,6 +172,7 @@ export class Gmx implements INodeType {
 		...tradesDescription,
 		...tokensDescription,
 		...subaccountsDescription,
+		...statsDescription,
 		...stakingDescription,
 		...riskOracleDescription,
 		...relayDescription,
