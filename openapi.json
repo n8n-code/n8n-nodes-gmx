@@ -191,6 +191,37 @@
       "GmUserEarningsResponse": {
         "$ref": "#/components/schemas/BigIntToString_GmUserEarningsData_"
       },
+      "Record_string.boolean_": {
+        "properties": {},
+        "additionalProperties": {
+          "type": "boolean"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "AccountWhitelistsResponse": {
+        "properties": {
+          "deposit": {
+            "properties": {
+              "glvs": {
+                "$ref": "#/components/schemas/Record_string.boolean_"
+              },
+              "markets": {
+                "$ref": "#/components/schemas/Record_string.boolean_"
+              }
+            },
+            "required": [
+              "glvs",
+              "markets"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "deposit"
+        ],
+        "type": "object"
+      },
       "TradeActionResponse": {
         "properties": {
           "reasonBytes": {
@@ -2107,6 +2138,45 @@
         ],
         "type": "object"
       },
+      "Record_string.unknown_": {
+        "properties": {},
+        "additionalProperties": {},
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "PaxosResponseBody": {
+        "$ref": "#/components/schemas/Record_string.unknown_"
+      },
+      "TransitFeeTier": {
+        "type": "string",
+        "enum": [
+          "zeroFee",
+          "standardFee"
+        ]
+      },
+      "TransitFeeTierResponse": {
+        "properties": {
+          "zeroFeeCapacity": {
+            "type": "string"
+          },
+          "feeTier": {
+            "$ref": "#/components/schemas/TransitFeeTier"
+          }
+        },
+        "required": [
+          "zeroFeeCapacity",
+          "feeTier"
+        ],
+        "type": "object"
+      },
+      "TransitResponseFormat": {
+        "type": "string",
+        "enum": [
+          "encoded",
+          "full",
+          "structured"
+        ]
+      },
       "PairResponse": {
         "properties": {
           "liquidity_in_usd": {
@@ -2117,6 +2187,10 @@
             "type": "string"
           },
           "volume_usd": {
+            "type": "number",
+            "format": "double"
+          },
+          "funding_interval_minutes": {
             "type": "number",
             "format": "double"
           },
@@ -4126,6 +4200,145 @@
           "1d"
         ]
       },
+      "BoostAprNotStarted": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_started"
+            ],
+            "nullable": false
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PoolBoostApr": {
+        "properties": {
+          "marketAddress": {
+            "type": "string"
+          },
+          "boostApr": {
+            "type": "number",
+            "format": "double"
+          },
+          "lastRoundTimestamp": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "marketAddress",
+          "boostApr",
+          "lastRoundTimestamp"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GlvBoostApr": {
+        "properties": {
+          "glvAddress": {
+            "type": "string"
+          },
+          "boostApr": {
+            "type": "number",
+            "format": "double"
+          },
+          "gmRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "premium": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "lastRoundTimestamp": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "glvAddress",
+          "boostApr",
+          "gmRate",
+          "premium",
+          "lastRoundTimestamp"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BoostAprActive": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "active"
+            ],
+            "nullable": false
+          },
+          "pools": {
+            "items": {
+              "$ref": "#/components/schemas/PoolBoostApr"
+            },
+            "type": "array"
+          },
+          "glv": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlvBoostApr"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "pools",
+          "glv"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BoostAprResponse": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/BoostAprNotStarted"
+          },
+          {
+            "$ref": "#/components/schemas/BoostAprActive"
+          }
+        ]
+      },
+      "MerklNativeAprEntry": {
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "opportunityId": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "number",
+            "format": "double"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "title",
+          "opportunityId",
+          "timestamp",
+          "value"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
       "CrossChainDepositPrepareResponse": {
         "properties": {
           "expiresAt": {
@@ -4240,12 +4453,6 @@
           "srcChainId"
         ],
         "type": "object"
-      },
-      "Record_string.unknown_": {
-        "properties": {},
-        "additionalProperties": {},
-        "type": "object",
-        "description": "Construct a type with a set of properties K of type T"
       },
       "GasPaymentParamsDto": {
         "properties": {
@@ -4809,6 +5016,47 @@
           {
             "in": "query",
             "name": "account",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/whitelists": {
+      "get": {
+        "operationId": "GetWhitelists",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountWhitelistsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid address"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Whitelists of an address, read from the keeper and refreshed every minute.\ndeposit.markets has only the markets whose direct deposits are whitelist-only: true when the address may deposit.\ndeposit.glvs has only the GLVs whose deposits are whitelist-only: true when the address may deposit.",
+        "tags": [
+          "Whitelists"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "address",
             "required": true,
             "schema": {
               "type": "string"
@@ -5766,6 +6014,381 @@
         ]
       }
     },
+    "/paxos/transit/routes": {
+      "get": {
+        "operationId": "GetRoutes",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaxosResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          },
+          "502": {
+            "description": "Bad Gateway - Paxos request failed"
+          }
+        },
+        "description": "Conversion routes available in Paxos Transit.\nminOrderSize differs per fee tier, pass feeTier=zeroFee for the zero fee minimums.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "feeTier",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransitFeeTier"
+            }
+          }
+        ]
+      }
+    },
+    "/paxos/transit/fee-tier": {
+      "get": {
+        "operationId": "GetFeeTier",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransitFeeTierResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          }
+        },
+        "description": "zeroFee for whitelisted addresses, standardFee for everyone else.\nzeroFeeCapacity: max USDC to USDG zero fee amount (USDG base units), refreshed every minute; 0 for standardFee.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/paxos/transit/authorization": {
+      "get": {
+        "operationId": "GetAuthorization",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaxosResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          },
+          "502": {
+            "description": "Bad Gateway - Paxos request failed"
+          }
+        },
+        "description": "Whether the offer token needs a permit signature or an approval before the quote.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tokenAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "spenderAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "chainId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          }
+        ]
+      }
+    },
+    "/paxos/transit/orders/quote": {
+      "get": {
+        "operationId": "GetQuote",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaxosResponseBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - zero fee is not available for this route"
+          },
+          "403": {
+            "description": "Forbidden - userAddress is not whitelisted for zero fee"
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          },
+          "409": {
+            "description": "Conflict - zero fee capacity is not available now"
+          },
+          "502": {
+            "description": "Bad Gateway - Paxos request failed"
+          }
+        },
+        "description": "Signed submitOrder calldata. feeTier=zeroFee needs a whitelisted address, the USDC/USDG route on this chain and enough capacity.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offerAsset",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "wantAsset",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offerAmount",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sourceChainId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "destinationChainId",
+            "required": true,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "permitSignature",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "permitDeadline",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "responseFormat",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransitResponseFormat"
+            }
+          },
+          {
+            "in": "query",
+            "name": "feeTier",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransitFeeTier"
+            }
+          }
+        ]
+      }
+    },
+    "/paxos/transit/orders/{orderId}": {
+      "get": {
+        "operationId": "GetOrder",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaxosResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          },
+          "502": {
+            "description": "Bad Gateway - Paxos request failed"
+          }
+        },
+        "description": "Status of one Paxos Transit order.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/paxos/transit/orders": {
+      "get": {
+        "operationId": "GetOrders",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaxosResponseBody"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Paxos Transit is not enabled on this chain"
+          },
+          "502": {
+            "description": "Bad Gateway - Paxos request failed"
+          }
+        },
+        "description": "Paxos Transit order history of a user.",
+        "tags": [
+          "Paxos Transit"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "userAddress",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
     "/pairs": {
       "get": {
         "operationId": "GetPairs",
@@ -5787,6 +6410,38 @@
             "description": "Internal Server Error"
           }
         },
+        "tags": [
+          "Pairs"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/pairs/solana": {
+      "get": {
+        "operationId": "GetSolanaPairs",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PairResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Solana pairs are not available on this deployment or not ready"
+          }
+        },
+        "description": "Perpetual pairs of GMX on Solana, in the same format as /pairs. Funding is the paying side's rate in percent per\nhour, positive when longs pay. Served by the deployment that computes the protocol stats.",
         "tags": [
           "Pairs"
         ],
@@ -6414,6 +7069,56 @@
             }
           }
         ]
+      }
+    },
+    "/incentives/usdg/boost-apr": {
+      "get": {
+        "operationId": "GetUsdgBoostApr",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoostAprResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway"
+          }
+        },
+        "tags": [
+          "Incentives"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/incentives/usdg/merkl-apr": {
+      "get": {
+        "operationId": "GetUsdgMerklApr",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MerklNativeAprEntry"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Incentives"
+        ],
+        "security": [],
+        "parameters": []
       }
     },
     "/gmx-account/deposit/cross-chain/prepare": {

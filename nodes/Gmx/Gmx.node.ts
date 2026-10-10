@@ -1,5 +1,6 @@
 import { NodeConnectionTypes, type INodeType, type INodeTypeDescription } from 'n8n-workflow';
 import { yieldDescription } from './resources/yield';
+import { whitelistsDescription } from './resources/whitelists';
 import { tradesDescription } from './resources/trades';
 import { tokensDescription } from './resources/tokens';
 import { subaccountsDescription } from './resources/subaccounts';
@@ -11,11 +12,13 @@ import { ratesDescription } from './resources/rates';
 import { pricesDescription } from './resources/prices';
 import { positionsDescription } from './resources/positions';
 import { performanceDescription } from './resources/performance';
+import { paxosTransitDescription } from './resources/paxos-transit';
 import { pairsDescription } from './resources/pairs';
 import { ordersDescription } from './resources/orders';
 import { orderTransactionsDescription } from './resources/order-transactions';
 import { marketsDescription } from './resources/markets';
 import { jitDescription } from './resources/jit';
+import { incentivesDescription } from './resources/incentives';
 import { gmxAccountDescription } from './resources/gmx-account';
 import { buybackDescription } from './resources/buyback';
 import { balancesDescription } from './resources/balances';
@@ -58,6 +61,11 @@ export class Gmx implements INodeType {
 				{
 					"name": "Yield",
 					"value": "Yield",
+					"description": ""
+				},
+				{
+					"name": "Whitelists",
+					"value": "Whitelists",
 					"description": ""
 				},
 				{
@@ -116,6 +124,11 @@ export class Gmx implements INodeType {
 					"description": ""
 				},
 				{
+					"name": "Paxos Transit",
+					"value": "Paxos Transit",
+					"description": ""
+				},
+				{
 					"name": "Pairs",
 					"value": "Pairs",
 					"description": ""
@@ -138,6 +151,11 @@ export class Gmx implements INodeType {
 				{
 					"name": "JIT",
 					"value": "JIT",
+					"description": ""
+				},
+				{
+					"name": "Incentives",
+					"value": "Incentives",
 					"description": ""
 				},
 				{
@@ -169,6 +187,7 @@ export class Gmx implements INodeType {
 			"default": ""
 		},
 		...yieldDescription,
+		...whitelistsDescription,
 		...tradesDescription,
 		...tokensDescription,
 		...subaccountsDescription,
@@ -180,11 +199,13 @@ export class Gmx implements INodeType {
 		...pricesDescription,
 		...positionsDescription,
 		...performanceDescription,
+		...paxosTransitDescription,
 		...pairsDescription,
 		...ordersDescription,
 		...orderTransactionsDescription,
 		...marketsDescription,
 		...jitDescription,
+		...incentivesDescription,
 		...gmxAccountDescription,
 		...buybackDescription,
 		...balancesDescription,

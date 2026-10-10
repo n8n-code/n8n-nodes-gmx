@@ -13,7 +13,7 @@ Every time you connect n8n to gmx, you waste hours mapping endpoints, defining p
 
 **What if connecting n8n to gmx took 5 minutes, not half a day?**
 
-This node gives you **22+ resources** out of the box: **Yield**, **Trades**, **Tokens**, **Subaccounts**, **Stats**, and 17 more: with full CRUD operations, typed parameters, and zero manual configuration.
+This node gives you **25+ resources** out of the box: **Yield**, **Whitelists**, **Trades**, **Tokens**, **Subaccounts**, and 20 more: with full CRUD operations, typed parameters, and zero manual configuration.
 
 ---
 
@@ -58,6 +58,13 @@ That's it. No configuration files. No code. It just works.
 
 - Get Gm Pools Yield Pnl
 - Get Gm User Earnings
+
+</details>
+
+<details>
+<summary><b>Whitelists</b> (1 operations)</summary>
+
+- Get Whitelists
 
 </details>
 
@@ -147,9 +154,22 @@ That's it. No configuration files. No code. It just works.
 </details>
 
 <details>
-<summary><b>Pairs</b> (1 operations)</summary>
+<summary><b>Paxos Transit</b> (6 operations)</summary>
+
+- Get Routes
+- Get Fee Tier
+- Get Authorization
+- Get Quote
+- Get Order
+- Get Orders
+
+</details>
+
+<details>
+<summary><b>Pairs</b> (2 operations)</summary>
 
 - Get Pairs
+- Get Solana Pairs
 
 </details>
 
@@ -190,6 +210,14 @@ That's it. No configuration files. No code. It just works.
 
 - Get Liquidity Info
 - Get Liquidity History
+
+</details>
+
+<details>
+<summary><b>Incentives</b> (2 operations)</summary>
+
+- Get Usdg Boost Apr
+- Get Usdg Merkl Apr
 
 </details>
 

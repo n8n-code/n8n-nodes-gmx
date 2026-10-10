@@ -25,6 +25,18 @@ export const pairsDescription: INodeProperties[] = [
 							"url": "=/pairs"
 						}
 					}
+				},
+				{
+					"name": "Get Solana Pairs",
+					"value": "Get Solana Pairs",
+					"action": "Get Solana Pairs",
+					"description": "Perpetual pairs of GMX on Solana, in the same format as /pairs. Funding is the paying side's rate in percent per\nhour, positive when longs pay. Served by the deployment that computes the protocol stats.",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/pairs/solana"
+						}
+					}
 				}
 			],
 			"default": ""
@@ -44,6 +56,25 @@ export const pairsDescription: INodeProperties[] = [
 					],
 					"operation": [
 						"Get Pairs"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /pairs/solana",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Pairs"
+					],
+					"operation": [
+						"Get Solana Pairs"
 					]
 				}
 			}
