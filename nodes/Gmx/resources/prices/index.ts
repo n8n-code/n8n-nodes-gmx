@@ -25,6 +25,18 @@ export const pricesDescription: INodeProperties[] = [
 							"url": "=/prices/ohlcv"
 						}
 					}
+				},
+				{
+					"name": "Get Tickers",
+					"value": "Get Tickers",
+					"action": "Get Tickers",
+					"description": "The snapshot the `prices` WebSocket channel streams. Prices are USD with 30 decimals per whole token, keyed by\ntoken address; the keeper's own /prices/tickers quotes per-unit contract prices instead.",
+					"routing": {
+						"request": {
+							"method": "GET",
+							"url": "=/prices/tickers"
+						}
+					}
 				}
 			],
 			"default": ""
@@ -143,6 +155,25 @@ export const pricesDescription: INodeProperties[] = [
 					],
 					"operation": [
 						"Get Ohlcv"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "GET /prices/tickers",
+			"name": "operation",
+			"type": "notice",
+			"typeOptions": {
+				"theme": "info"
+			},
+			"default": "",
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Prices"
+					],
+					"operation": [
+						"Get Tickers"
 					]
 				}
 			}

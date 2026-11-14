@@ -457,6 +457,30 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			}
 		},
 		{
+			"displayName": "Skip Execution Fee Priority Fee Allowance",
+			"name": "skipExecutionFeePriorityFeeAllowance",
+			"type": "boolean",
+			"default": true,
+			"routing": {
+				"send": {
+					"property": "skipExecutionFeePriorityFeeAllowance",
+					"propertyInDotNotation": false,
+					"type": "body",
+					"value": "={{ $value }}"
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Order Transactions"
+					],
+					"operation": [
+						"Prepare"
+					]
+				}
+			}
+		},
+		{
 			"displayName": "Execution Fee Buffer Bps",
 			"name": "executionFeeBufferBps",
 			"type": "number",
@@ -1575,6 +1599,30 @@ export const orderTransactionsDescription: INodeProperties[] = [
 			"routing": {
 				"send": {
 					"property": "gasPaymentToken",
+					"propertyInDotNotation": false,
+					"type": "body",
+					"value": "={{ $value }}"
+				}
+			},
+			"displayOptions": {
+				"show": {
+					"resource": [
+						"Order Transactions"
+					],
+					"operation": [
+						"Collateral Prepare"
+					]
+				}
+			}
+		},
+		{
+			"displayName": "Skip Execution Fee Priority Fee Allowance",
+			"name": "skipExecutionFeePriorityFeeAllowance",
+			"type": "boolean",
+			"default": true,
+			"routing": {
+				"send": {
+					"property": "skipExecutionFeePriorityFeeAllowance",
 					"propertyInDotNotation": false,
 					"type": "body",
 					"value": "={{ $value }}"

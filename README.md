@@ -131,9 +131,10 @@ That's it. No configuration files. No code. It just works.
 </details>
 
 <details>
-<summary><b>Prices</b> (1 operations)</summary>
+<summary><b>Prices</b> (2 operations)</summary>
 
 - Get Ohlcv
+- Get Tickers
 
 </details>
 

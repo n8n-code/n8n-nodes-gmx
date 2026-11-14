@@ -30,7 +30,7 @@ export const paxosTransitDescription: INodeProperties[] = [
 					"name": "Get Fee Tier",
 					"value": "Get Fee Tier",
 					"action": "Get Fee Tier",
-					"description": "zeroFee for whitelisted addresses, standardFee for everyone else.\nzeroFeeCapacity: max USDC to USDG zero fee amount (USDG base units), refreshed every minute; 0 for standardFee.",
+					"description": "zeroFee for whitelisted addresses, standardFee for everyone else.\nisZeroFeeAvailable: whether Paxos fills zero fee now.\nzeroFeeCapacity: max USDC to USDG zero fee amount (USDG base units); 0 when zero fee is not available.\nzeroFeeClosesAt: the next scheduled zero fee closure, if known.\nzeroFeeExpectedReopenAt: when zero fee is expected back, if known.",
 					"routing": {
 						"request": {
 							"method": "GET",
@@ -54,7 +54,7 @@ export const paxosTransitDescription: INodeProperties[] = [
 					"name": "Get Quote",
 					"value": "Get Quote",
 					"action": "Get Quote",
-					"description": "Signed submitOrder calldata. feeTier=zeroFee needs a whitelisted address, the USDC/USDG route on this chain and enough capacity.",
+					"description": "Signed submitOrder calldata. feeTier=zeroFee needs a whitelisted address, USDC to USDG on this chain and available zero fee capacity.",
 					"routing": {
 						"request": {
 							"method": "GET",

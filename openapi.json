@@ -755,6 +755,9 @@
       },
       "SubaccountStatusResponse": {
         "properties": {
+          "revocationCounter": {
+            "type": "string"
+          },
           "integrationId": {
             "type": "string",
             "nullable": true
@@ -782,6 +785,7 @@
           }
         },
         "required": [
+          "revocationCounter",
           "integrationId",
           "multichainApprovalNonce",
           "approvalNonce",
@@ -839,6 +843,9 @@
       },
       "ApprovalPrepareResponse": {
         "properties": {
+          "revocationCounter": {
+            "type": "string"
+          },
           "nonce": {
             "type": "string"
           },
@@ -880,6 +887,7 @@
           }
         },
         "required": [
+          "revocationCounter",
           "nonce",
           "relayRouterAddress",
           "primaryType",
@@ -1802,6 +1810,43 @@
         ],
         "type": "object"
       },
+      "Record_string._minPrice-string--maxPrice-string__": {
+        "properties": {},
+        "additionalProperties": {
+          "properties": {
+            "maxPrice": {
+              "type": "string"
+            },
+            "minPrice": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "maxPrice",
+            "minPrice"
+          ],
+          "type": "object"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "TokenPricesResponse": {
+        "properties": {
+          "originTs": {
+            "type": "number",
+            "format": "double",
+            "description": "Observation time of the oldest price in the snapshot, unix milliseconds."
+          },
+          "prices": {
+            "$ref": "#/components/schemas/Record_string._minPrice-string--maxPrice-string__"
+          }
+        },
+        "required": [
+          "originTs",
+          "prices"
+        ],
+        "type": "object"
+      },
       "OrderResponse": {
         "properties": {
           "requestId": {
@@ -2156,6 +2201,15 @@
       },
       "TransitFeeTierResponse": {
         "properties": {
+          "zeroFeeExpectedReopenAt": {
+            "type": "string"
+          },
+          "zeroFeeClosesAt": {
+            "type": "string"
+          },
+          "isZeroFeeAvailable": {
+            "type": "boolean"
+          },
           "zeroFeeCapacity": {
             "type": "string"
           },
@@ -2164,6 +2218,7 @@
           }
         },
         "required": [
+          "isZeroFeeAvailable",
           "zeroFeeCapacity",
           "feeTier"
         ],
@@ -2704,6 +2759,9 @@
             ],
             "type": "object"
           },
+          "skipExecutionFeePriorityFeeAllowance": {
+            "type": "boolean"
+          },
           "executionFeeBufferBps": {
             "type": "number",
             "format": "double"
@@ -2997,6 +3055,9 @@
           },
           "gasPaymentToken": {
             "type": "string"
+          },
+          "skipExecutionFeePriorityFeeAllowance": {
+            "type": "boolean"
           },
           "executionFeeBufferBps": {
             "type": "number",
@@ -4947,6 +5008,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "description": "Fee-only APY plus trader PnL for GM pools, one row per GM market token.\nMetrics are null when the pool has no indexed data for the window; young pools are annualized over their listed window; unknown pool addresses in the pools filter are ignored.\nWindow timestamps are hour-aligned to the indexer's snapshots; responses are served from a cached snapshot — window.endTimestamp reports its freshness.",
@@ -5084,6 +5148,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -5183,6 +5250,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "description": "Trade history search supporting the same filters used by the GMX UI:\nmarketsDirections (per-tuple market+direction+collateral) and\norderEventCombinations (orderType+eventName+isDepositOrWithdraw+isTwap).",
@@ -5521,6 +5591,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -5675,6 +5748,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -5774,6 +5850,32 @@
             }
           }
         ]
+      }
+    },
+    "/prices/tickers": {
+      "get": {
+        "operationId": "GetTickers",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPricesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "The snapshot the `prices` WebSocket channel streams. Prices are USD with 30 decimals per whole token, keyed by\ntoken address; the keeper's own /prices/tickers quotes per-unit contract prices instead.",
+        "tags": [
+          "Prices"
+        ],
+        "security": [],
+        "parameters": []
       }
     },
     "/positions": {
@@ -5909,6 +6011,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -5988,6 +6093,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -6078,7 +6186,7 @@
             "description": "Not Found - Paxos Transit is not enabled on this chain"
           }
         },
-        "description": "zeroFee for whitelisted addresses, standardFee for everyone else.\nzeroFeeCapacity: max USDC to USDG zero fee amount (USDG base units), refreshed every minute; 0 for standardFee.",
+        "description": "zeroFee for whitelisted addresses, standardFee for everyone else.\nisZeroFeeAvailable: whether Paxos fills zero fee now.\nzeroFeeCapacity: max USDC to USDG zero fee amount (USDG base units); 0 when zero fee is not available.\nzeroFeeClosesAt: the next scheduled zero fee closure, if known.\nzeroFeeExpectedReopenAt: when zero fee is expected back, if known.",
         "tags": [
           "Paxos Transit"
         ],
@@ -6190,13 +6298,13 @@
             "description": "Not Found - Paxos Transit is not enabled on this chain"
           },
           "409": {
-            "description": "Conflict - zero fee capacity is not available now"
+            "description": "Conflict - zero fee is not available now"
           },
           "502": {
             "description": "Bad Gateway - Paxos request failed"
           }
         },
-        "description": "Signed submitOrder calldata. feeTier=zeroFee needs a whitelisted address, the USDC/USDG route on this chain and enough capacity.",
+        "description": "Signed submitOrder calldata. feeTier=zeroFee needs a whitelisted address, USDC to USDG on this chain and available zero fee capacity.",
         "tags": [
           "Paxos Transit"
         ],
@@ -6408,6 +6516,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
@@ -7222,6 +7333,9 @@
           },
           "429": {
             "description": "Too Many Requests"
+          },
+          "503": {
+            "description": "Relay Unavailable"
           }
         },
         "tags": [
@@ -7366,6 +7480,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "504": {
+            "description": "Upstream timeout"
           }
         },
         "tags": [
