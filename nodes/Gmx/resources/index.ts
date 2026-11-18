@@ -15,6 +15,7 @@ export { paxosTransitDescription } from './paxos-transit';
 export { pairsDescription } from './pairs';
 export { ordersDescription } from './orders';
 export { orderTransactionsDescription } from './order-transactions';
+export { notificationsDescription } from './notifications';
 export { marketsDescription } from './markets';
 export { jitDescription } from './jit';
 export { incentivesDescription } from './incentives';

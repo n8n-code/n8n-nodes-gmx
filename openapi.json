@@ -1984,6 +1984,13 @@
             },
             "type": "array"
           },
+          "fundingSettlement": {
+            "type": "string",
+            "enum": [
+              "nextOrder"
+            ],
+            "nullable": false
+          },
           "pendingClaimableFundingFeesUsd": {
             "type": "string"
           },
@@ -3086,6 +3093,121 @@
         ],
         "type": "object"
       },
+      "NotificationType": {
+        "type": "string",
+        "enum": [
+          "order.executed",
+          "position.liquidated"
+        ]
+      },
+      "NotificationsConfigResponse": {
+        "properties": {
+          "types": {
+            "items": {
+              "properties": {
+                "defaultOn": {
+                  "type": "boolean",
+                  "enum": [
+                    true
+                  ],
+                  "nullable": false
+                },
+                "safety": {
+                  "type": "boolean"
+                },
+                "id": {
+                  "$ref": "#/components/schemas/NotificationType"
+                }
+              },
+              "required": [
+                "defaultOn",
+                "safety",
+                "id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "vapidPublicKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "types",
+          "vapidPublicKey"
+        ],
+        "type": "object"
+      },
+      "PushSubscription": {
+        "properties": {
+          "expirationTime": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "keys": {
+            "properties": {
+              "auth": {
+                "type": "string"
+              },
+              "p256dh": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "auth",
+              "p256dh"
+            ],
+            "type": "object"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "keys",
+          "endpoint"
+        ],
+        "type": "object"
+      },
+      "RegisterNotificationRequest": {
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "EIP-191 signature of the account owner, ERC-1271 or ERC-6492 for contract wallets. Needed only to add a device\nonce the account has 10 (`409 REGISTRATION_LIMIT_REACHED`); at 100 a signed device replaces another. Signs, joined with \"\\n\":\n`GMX Notifications Device`, `account: <checksummed account>`, `chainId: <chain id>`, `timestamp: <timestamp>`,\n`endpointHash: <SHA-256 of the UTF-8 bytes of subscription.endpoint, 64 lower-case hex characters, no 0x prefix>`."
+          },
+          "timestamp": {
+            "type": "number",
+            "format": "double",
+            "description": "Unix seconds the owner signed at; required with `signature`."
+          },
+          "oldEndpoint": {
+            "type": "string"
+          },
+          "subscription": {
+            "$ref": "#/components/schemas/PushSubscription"
+          },
+          "account": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subscription",
+          "account"
+        ],
+        "type": "object"
+      },
+      "NotificationEndpointRequest": {
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "endpoint"
+        ],
+        "type": "object"
+      },
       "LeverageTierResponse": {
         "properties": {
           "maxPositionSize": {
@@ -3594,6 +3716,19 @@
           },
           "name": {
             "type": "string"
+          },
+          "minPositionSizeUsd": {
+            "type": "string"
+          },
+          "minCollateralUsd": {
+            "type": "string"
+          },
+          "tradeMath": {
+            "type": "string",
+            "enum": [
+              "gmsol"
+            ],
+            "nullable": false
           }
         },
         "required": [
@@ -3918,6 +4053,19 @@
             "type": "string"
           },
           "virtualShortTokenId": {
+            "type": "string"
+          },
+          "tradeMath": {
+            "type": "string",
+            "enum": [
+              "gmsol"
+            ],
+            "nullable": false
+          },
+          "minCollateralUsd": {
+            "type": "string"
+          },
+          "minPositionSizeUsd": {
             "type": "string"
           }
         },
@@ -6878,6 +7026,166 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CollateralPrepareRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/config": {
+      "get": {
+        "operationId": "Config",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationsConfigResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notifications are not served on this host"
+          },
+          "429": {
+            "description": "Too many requests"
+          },
+          "503": {
+            "description": "Notifications are temporarily unavailable"
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/notifications/register": {
+      "post": {
+        "operationId": "Register",
+        "responses": {
+          "204": {
+            "description": "Registration saved"
+          },
+          "400": {
+            "description": "Invalid account, subscription or signature format"
+          },
+          "401": {
+            "description": "The registration signature has expired or does not match the account"
+          },
+          "404": {
+            "description": "Notifications are not served on this host"
+          },
+          "409": {
+            "description": "REGISTRATION_LIMIT_REACHED: sign the registration to add this device"
+          },
+          "429": {
+            "description": "Too many requests or wallet signature checks"
+          },
+          "503": {
+            "description": "Notifications are temporarily unavailable"
+          },
+          "504": {
+            "description": "The wallet signature check did not answer in time; please try again"
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterNotificationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/unregister": {
+      "post": {
+        "operationId": "Unregister",
+        "responses": {
+          "204": {
+            "description": "Registration removed"
+          },
+          "400": {
+            "description": "Invalid endpoint"
+          },
+          "404": {
+            "description": "Notifications are not served on this host"
+          },
+          "429": {
+            "description": "Too many requests"
+          },
+          "503": {
+            "description": "Notifications are temporarily unavailable"
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationEndpointRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/test": {
+      "post": {
+        "operationId": "Test",
+        "responses": {
+          "204": {
+            "description": "Test sent"
+          },
+          "400": {
+            "description": "Invalid endpoint"
+          },
+          "404": {
+            "description": "The registration was not found, or notifications are not served on this host"
+          },
+          "410": {
+            "description": "The registration is no longer available"
+          },
+          "422": {
+            "description": "The push service rejected this registration; subscribe again"
+          },
+          "429": {
+            "description": "Too many test sends"
+          },
+          "503": {
+            "description": "Notifications are temporarily unavailable"
+          },
+          "504": {
+            "description": "The push service did not take the test notification in time; please try again"
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationEndpointRequest"
               }
             }
           }

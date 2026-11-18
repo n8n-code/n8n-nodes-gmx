@@ -13,7 +13,7 @@ Every time you connect n8n to gmx, you waste hours mapping endpoints, defining p
 
 **What if connecting n8n to gmx took 5 minutes, not half a day?**
 
-This node gives you **25+ resources** out of the box: **Yield**, **Whitelists**, **Trades**, **Tokens**, **Subaccounts**, and 20 more: with full CRUD operations, typed parameters, and zero manual configuration.
+This node gives you **26+ resources** out of the box: **Yield**, **Whitelists**, **Trades**, **Tokens**, **Subaccounts**, and 21 more: with full CRUD operations, typed parameters, and zero manual configuration.
 
 ---
 
@@ -191,6 +191,16 @@ That's it. No configuration files. No code. It just works.
 - Post Edit Prepare
 - Post Cancel Prepare
 - Post Collateral Prepare
+
+</details>
+
+<details>
+<summary><b>Notifications</b> (4 operations)</summary>
+
+- Get Config
+- Post Register
+- Post Unregister
+- Post Test
 
 </details>
 

@@ -16,6 +16,7 @@ import { paxosTransitDescription } from './resources/paxos-transit';
 import { pairsDescription } from './resources/pairs';
 import { ordersDescription } from './resources/orders';
 import { orderTransactionsDescription } from './resources/order-transactions';
+import { notificationsDescription } from './resources/notifications';
 import { marketsDescription } from './resources/markets';
 import { jitDescription } from './resources/jit';
 import { incentivesDescription } from './resources/incentives';
@@ -144,6 +145,11 @@ export class Gmx implements INodeType {
 					"description": ""
 				},
 				{
+					"name": "Notifications",
+					"value": "Notifications",
+					"description": ""
+				},
+				{
 					"name": "Markets",
 					"value": "Markets",
 					"description": ""
@@ -203,6 +209,7 @@ export class Gmx implements INodeType {
 		...pairsDescription,
 		...ordersDescription,
 		...orderTransactionsDescription,
+		...notificationsDescription,
 		...marketsDescription,
 		...jitDescription,
 		...incentivesDescription,
